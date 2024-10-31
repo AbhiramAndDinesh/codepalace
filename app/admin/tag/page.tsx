@@ -30,7 +30,9 @@ export default function MyForm() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     try {
-      createTag({ name: values.name });
+      createTag({ name: values.name }).then(() => {
+        console.log("Sucessfully created the tag");
+      });
     } catch (error) {
       console.log("Error", error);
     }

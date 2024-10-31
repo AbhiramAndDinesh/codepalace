@@ -57,6 +57,7 @@ model JSolvedUsers {
 model Problem {
   problem_id   Int            @id @default(autoincrement())
   title        String         @unique
+  slug         String         @unique
   statement    String
   difficulty   String
   tags         JunctionTags[]

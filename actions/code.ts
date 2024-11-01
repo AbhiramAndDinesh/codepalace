@@ -122,7 +122,12 @@ export const executeSubmit = async ({
       const user_id = user[0]?.id;
       console.log(user, user_id);
       if (user_id) {
-        await prisma.jSolvedUsers.create({ data: { user_id, problem_id } });
+        const alreadySolved = await prisma.jSolvedUsers.findMany({
+          where: { user_id, problem_id },
+        });
+        if (!alreadySolved) {
+          await prisma.jSolvedUsers.create({ data: { user_id, problem_id } });
+        }
         console.log("Done");
       }
     }

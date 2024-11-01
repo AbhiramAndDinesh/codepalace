@@ -32,8 +32,9 @@ const Playground = ({
     // @ts-expect-error error will not occur
   >(language);
   const { data: session } = useSession();
+
   const handleSubmit = () => {
-    console.log(code, problem_id, session?.user?.email, lang);
+    // console.log(code, problem_id, session?.user?.email, lang);
     executeSubmit({
       source_code: code,
       problem_id,
@@ -47,6 +48,7 @@ const Playground = ({
       }
     });
   };
+
   return (
     <div className="w-full h-full">
       <Select onValueChange={(e) => setLang(e)} defaultValue={lang}>

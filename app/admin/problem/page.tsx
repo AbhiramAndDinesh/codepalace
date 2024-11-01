@@ -29,6 +29,7 @@ const formSchema = z.object({
   statement: z.string(),
   slug: z.string(),
   difficulty: z.enum(["Easy", "Medium", "Hard"]),
+  points: z.number(),
 });
 
 export default function MyForm() {
@@ -39,6 +40,7 @@ export default function MyForm() {
       statement: "",
       difficulty: "Easy",
       slug: "",
+      points: 100,
     },
   });
 
@@ -49,6 +51,7 @@ export default function MyForm() {
         difficulty: values.difficulty,
         statement: values.statement,
         slug: values.slug,
+        points: values.points,
       });
       console.log(values);
     } catch (error) {
@@ -100,7 +103,29 @@ export default function MyForm() {
                 </FormItem>
               )}
             />
+  <FormField
+              control={form.control}
+              name="points"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Points</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="ex: 100"
+                      type="number"
+                      {...field}
+                      onChange={(e) => {
+                        if (e.target) {
+                          field.onChange(e.target.valueAsNumber);
+                        }
+                      }}
+                    />
+                  </FormControl>
 
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-6">
                 <FormField
@@ -118,7 +143,7 @@ export default function MyForm() {
                   )}
                 />
               </div>
-
+            
               <div className="col-span-6">
                 <FormField
                   control={form.control}

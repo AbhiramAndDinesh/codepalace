@@ -7,6 +7,7 @@ interface ProblemSchema {
   statement: string;
   difficulty: "Easy" | "Medium" | "Hard";
   slug: string;
+  points: number;
 }
 
 export const createQuestion = async ({
@@ -14,6 +15,7 @@ export const createQuestion = async ({
   statement,
   difficulty,
   slug,
+  points,
 }: ProblemSchema) => {
   try {
     const res = await prisma.problem.create({
@@ -22,6 +24,7 @@ export const createQuestion = async ({
         statement,
         slug,
         difficulty,
+        points,
       },
     });
     return res.problem_id;

@@ -125,7 +125,8 @@ export const executeSubmit = async ({
         const alreadySolved = await prisma.jSolvedUsers.findMany({
           where: { user_id, problem_id },
         });
-        if (!alreadySolved) {
+        console.log("checkpost 4: reached", alreadySolved);
+        if (alreadySolved.length == 0) {
           await prisma.jSolvedUsers.create({ data: { user_id, problem_id } });
         }
         console.log("Done");

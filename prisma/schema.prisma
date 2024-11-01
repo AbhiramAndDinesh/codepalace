@@ -16,9 +16,10 @@ model User {
   accounts      Account[]
   sessions      Session[]
   problems      JSolvedUsers[]
+  leaderboard  Leaderboard?
   // Optional for WebAuthn support
   Authenticator Authenticator[]
-
+  score        Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -63,7 +64,7 @@ model Problem {
   tags         JunctionTags[]
   users_solved JSolvedUsers[]
   testcases    Testcase[]
-
+  points    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -124,4 +125,23 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Leaderboard{
+  username String @unique
+  user_id String @unique
+ 
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  codechefusername           String? @unique
+  codeforcesusername         String? @unique
+  leetcodeusername           String? @unique
+  codechefRating             Int?
+  codechefProblemsSolved     Int?
+  codechefContestsAttended   Int?
+  codeforcesRating           Int?
+  codeforcesContestsAttended Int?
+  leetcodeRating             Int?
+  leetcodeProblemsSolved     Int?
+  leetcodeContestsAttended   Int?
 }

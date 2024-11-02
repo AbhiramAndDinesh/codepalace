@@ -24,23 +24,23 @@ async function leetcodeScrape(params: {
     const { user_id, leetcodeusername } = params;
     const response = await axios.post(
       url,
-      { query: query, variables: {username: leetcodeusername } },
+      { query: query, variables: { username: leetcodeusername } },
       {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     console.log("Response from leetcode graphql", response.status);
     console.log(response.data);
-    if(response.status !== 200) {
-        console.log("Error in leetcode graphql");
-        return {
-            user_id,
-            leetcodeRating: 0,
-            leetcodeProblemsSolved: 0,
-            leetcodeContestsAttended: 0,
-          };
+    if (response.status !== 200) {
+      console.log("Error in leetcode graphql");
+      return {
+        user_id,
+        leetcodeRating: 0,
+        leetcodeProblemsSolved: 0,
+        leetcodeContestsAttended: 0,
+      };
     }
     if (response.data.errors) {
       return {
@@ -60,7 +60,7 @@ async function leetcodeScrape(params: {
     const leetcodeProblemsSolved =
       data.matchedUser.submitStatsGlobal.acSubmissionNum[0].count;
     console.log(
-      `Leetcode Problems Solved:${leetcodeProblemsSolved},Rating:${leetcodeRating},ContestsAttended:${leetcodeContestsAttended}`
+      `Leetcode Problems Solved:${leetcodeProblemsSolved},Rating:${leetcodeRating},ContestsAttended:${leetcodeContestsAttended}`,
     );
     return {
       user_id,
@@ -129,7 +129,7 @@ async function leetcodemain() {
         }
         const data = await leetcodeScrape({ user_id, leetcodeusername });
         return data;
-      }
+      },
     );
 
     const leetcodeDataArray = await Promise.all(leetcodeData);
@@ -145,7 +145,7 @@ async function leetcodemain() {
           leetcodeContestsAttended: number;
         }) => {
           await leedcodeUpdate(values);
-        }
+        },
       );
 
     await Promise.all(leetcodeupdatePromise);
@@ -163,21 +163,17 @@ export async function POST() {
   try {
     console.log("Leetcode Api called");
     const res = await leetcodemain();
-    if(res.status === 200) {
-        console.log("Succesfully executed Leetcode Api");
-        return new NextResponse("Succesfully executed Leetcode Api", {
-            status: 200,
-          });
+    if (res.status === 200) {
+      console.log("Succesfully executed Leetcode Api");
+      return new NextResponse("Succesfully executed Leetcode Api", {
+        status: 200,
+      });
+    } else {
+      console.log("Error in leetcode api");
+      return new NextResponse("Error in leetcode api", { status: 500 });
     }
-    else{
-        console.log("Error in leetcode api");
-        return new NextResponse("Error in leetcode api", { status: 500 });
-    }
-    
   } catch (error) {
     console.log("Error in leetcode api", error);
     return new NextResponse("Error in leetcode api", { status: 500 });
   }
 }
-
-leetcodemain();

@@ -2,6 +2,7 @@
 
 import { prisma } from "@/prisma";
 import axios from "axios";
+import { addStreak } from "./streak";
 
 interface SubmitSchema {
   source_code: string;
@@ -16,6 +17,13 @@ export const executeSubmit = async ({
   email,
   problem_id,
 }: SubmitSchema) => {
+  const user = await prisma.user.findMany({
+    where: {
+      email,
+    },
+  });
+  const user_id = user[0]?.id;
+  addStreak(user_id);
   const languageId = {
     "c++": 54,
     c: 50,
@@ -39,7 +47,6 @@ export const executeSubmit = async ({
     source_code,
     language_id,
   }));
-  console.log("Check post 1: reached", source_code, submissions);
   let max_time = 0;
   let max_memory = 0;
   try {
@@ -59,7 +66,6 @@ export const executeSubmit = async ({
         },
         data: submissions[i],
       });
-      console.log(response.data);
       if (response.data.memory > max_memory) max_memory = response.data.memory;
       const time = parseFloat(response.data.time);
       if (time > max_time) max_time = time;
@@ -69,21 +75,13 @@ export const executeSubmit = async ({
     }
 
     const total_testcases = submissions.length;
-    const user = await prisma.user.findMany({
-      where: {
-        email,
-      },
-    });
-    const user_id = user[0]?.id;
-    if (failed.length === 0) {
-      console.log("Reached here: Checkpost 3", email);
 
+    if (failed.length === 0) {
       console.log(user, user_id);
       if (user_id) {
         const alreadySolved = await prisma.jSolvedUsers.findMany({
           where: { user_id, problem_id },
         });
-        console.log("checkpost 4: reached", alreadySolved);
         if (alreadySolved.length == 0) {
           await prisma.jSolvedUsers.create({ data: { user_id, problem_id } });
         }

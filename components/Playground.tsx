@@ -1,6 +1,6 @@
 "use client";
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -26,12 +26,53 @@ const Playground = ({
   problem_id: number;
 }) => {
   const [code, setCode] = useState("");
-
+  const [effectChain, setEffectChain] = useState(0);
   const [lang, setLang] = useState<
     "c" | "c++" | "python" | "java" | "javascript" | "go"
     // @ts-expect-error error will not occur
   >(language);
   const { data: session } = useSession();
+
+  useEffect(() => {
+    const createStorage = () => {
+      const savedCode = localStorage.getItem(`${problem_id}`);
+      if (!savedCode) {
+        const x: {
+          java: string;
+          python: string;
+          c: string;
+          javascript: string;
+          "c++": string;
+          go: string;
+        } = {
+          "c++": "",
+          java: "",
+          python: "",
+          c: "",
+          javascript: "",
+          go: "",
+        };
+        localStorage.setItem(`${problem_id}`, JSON.stringify(x));
+      }
+    };
+    const loadCode = () => {
+      const stringCode = localStorage.getItem(`${problem_id}`);
+      const codeObj = JSON.parse(stringCode!);
+      setCode(codeObj[lang]);
+    };
+    createStorage();
+    loadCode();
+    setEffectChain(1);
+  }, [problem_id, lang]);
+
+  useEffect(() => {
+    if (effectChain == 1) {
+      const savedCode = localStorage.getItem(`${problem_id}`);
+      const newCode = JSON.parse(savedCode!);
+      newCode[lang] = code;
+      localStorage.setItem(`${problem_id}`, JSON.stringify(newCode));
+    }
+  }, [effectChain, code, lang, problem_id]);
 
   const handleSubmit = () => {
     // console.log(code, problem_id, session?.user?.email, lang);
@@ -68,18 +109,17 @@ const Playground = ({
             height="100%"
             defaultLanguage={lang}
             defaultValue={code}
-            theme="vs-dark"
+            theme="light"
             options={{
               fontSize: 14,
               minimap: {
                 enabled: false,
               },
             }}
+            value={code}
             onChange={(e) => {
               if (e) {
                 setCode(e);
-              } else {
-                setCode("");
               }
             }}
             language={lang}

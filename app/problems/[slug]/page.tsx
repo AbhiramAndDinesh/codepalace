@@ -7,6 +7,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { auth } from "@/auth";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 const ProblemPage = async ({ params }: { params: { slug: string } }) => {
   const problem = await getQuestionBySlug((await params).slug);
   const session = await auth();
@@ -25,7 +27,7 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
       </div>
     );
   return (
-    <div className="h-screen">
+    <div className="min-h-screen">
       <form
         action={async () => {
           "use server";
@@ -40,23 +42,32 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
         </button>
       </form>
       {solved && <div className="bg-green-500">Solved</div>}
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={45} minSize={20}>
-          <div className="w-full bg-blue-200 h-full">
-            <h1>{problem.title}</h1>
-            <div dangerouslySetInnerHTML={{ __html: problem.statement }} />
-          </div>
-        </ResizablePanel>
-        <ResizableHandle
-          className="w-[5px] hover:bg-blue-500 bg-dark-layer-2"
-          withHandle
-        />
-        <ResizablePanel className="h-full" defaultSize={65} minSize={40}>
-          <div className="w-full h-full p-3 bg-red-400">
-            <Playground language="python" problem_id={problem.problem_id} />
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+      <Tabs defaultValue="question" className="w-full h-[87vh]">
+        <TabsList>
+          <TabsTrigger value="question">Question</TabsTrigger>
+          <TabsTrigger value="submissions">Submissions</TabsTrigger>
+        </TabsList>
+        <TabsContent value="question" className="h-full">
+          <ResizablePanelGroup direction="horizontal">
+            <ResizablePanel defaultSize={45} minSize={20}>
+              <div className="w-full bg-blue-200 h-full">
+                <h1>{problem.title}</h1>
+                <div dangerouslySetInnerHTML={{ __html: problem.statement }} />
+              </div>
+            </ResizablePanel>
+            <ResizableHandle
+              className="w-[5px] hover:bg-blue-500 bg-dark-layer-2"
+              withHandle
+            />
+            <ResizablePanel className="h-full" defaultSize={65} minSize={40}>
+              <div className="w-full h-full p-3 bg-red-400">
+                <Playground language="python" problem_id={problem.problem_id} />
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </TabsContent>
+        <TabsContent value="submission">Change your password here.</TabsContent>
+      </Tabs>
     </div>
   );
 };

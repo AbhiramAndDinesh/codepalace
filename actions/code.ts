@@ -39,25 +39,9 @@ export const executeSubmit = async ({
     source_code,
     language_id,
   }));
-  const optionsPost = {
-    method: "POST",
-    url: "http://43.204.98.127:2358/submissions",
-    params: {
-      base64_encoded: "false",
-      wait: "true",
-      fields: "status,time,token,language",
-    },
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      language_id: 71,
-      source_code: 'print("Hello")\nprint("Hello")',
-      stdin: "",
-      expected_output: "Hello\nHell",
-    },
-  };
   console.log("Check post 1: reached", source_code, submissions);
+  let max_time = 0;
+  let max_memory = 0;
   try {
     // Run testcases in the judge0
     const failed = [];
@@ -68,7 +52,7 @@ export const executeSubmit = async ({
         params: {
           base64_encoded: "false",
           wait: "true",
-          fields: "status,time,token,language",
+          fields: "status,time,token,language,memory",
         },
         headers: {
           "Content-Type": "application/json",
@@ -76,50 +60,24 @@ export const executeSubmit = async ({
         data: submissions[i],
       });
       console.log(response.data);
+      if (response.data.memory > max_memory) max_memory = response.data.memory;
+      const time = parseFloat(response.data.time);
+      if (time > max_time) max_time = time;
       if (response.data.status.description !== "Accepted") {
         failed.push(response.data);
       }
     }
 
-    // console.log("Check post 2: reached");
-    // const tokens_list: string[] = response.data.map(
-    //   (obj: { token: string }) => obj.token,
-    // );
-
-    // Get tokens from the response
-    // const tokens = tokens_list.join(",");
-    // console.log(tokens);
-    // Get the result of the testcases
-    // const getResponse = await axios.request({
-    //   method: "GET",
-    //   url: "http://43.204.98.127:2358/submissions/batch",
-    //   params: {
-    //     tokens,
-    //     base64_encoded: "false",
-    //     fields: "expected_output,stdout,time,exit_code",
-    //   },
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    // const result_data = getResponse.data.submissions;
-    // console.log("Checkpost 3: reached", result_data);
     const total_testcases = submissions.length;
-
-    // for (let i = 0; i < result_data.length; i++) {
-    //   if (!(result_data[i].expected_output === result_data[i].stdout)) {
-    //     failed.push(result_data[i]);
-    //   }
-    // }
-
+    const user = await prisma.user.findMany({
+      where: {
+        email,
+      },
+    });
+    const user_id = user[0]?.id;
     if (failed.length === 0) {
       console.log("Reached here: Checkpost 3", email);
-      const user = await prisma.user.findMany({
-        where: {
-          email,
-        },
-      });
-      const user_id = user[0]?.id;
+
       console.log(user, user_id);
       if (user_id) {
         const alreadySolved = await prisma.jSolvedUsers.findMany({
@@ -134,6 +92,17 @@ export const executeSubmit = async ({
     }
 
     // Return total number of testcases and the list of testcases which failed
+    await prisma.submission.create({
+      data: {
+        problem_id,
+        user_id,
+        code: source_code,
+        accepted: failed.length === 0,
+        failed_cases: failed.length,
+        time: max_time.toString(),
+        memory: max_memory.toString(),
+      },
+    });
     return { total_testcases, failed };
   } catch (error) {
     console.log(error);

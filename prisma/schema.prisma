@@ -14,14 +14,16 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
+  submissions   Submission[]
   sessions      Session[]
   problems      JSolvedUsers[]
-  leaderboard  Leaderboard?
+  leaderboard   Leaderboard?
+  streak        Int             @default(0)
   // Optional for WebAuthn support
   Authenticator Authenticator[]
-  score        Int @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  score         Int             @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 model Account {
@@ -45,6 +47,21 @@ model Account {
   @@id([provider, providerAccountId])
 }
 
+model Submission {
+  submission_id String  @id @default(cuid())
+  problem_id    Int
+  user_id       String
+  user          User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  problem       Problem @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
+  code          String
+  accepted      Boolean
+  failed_cases  Int
+  time          String
+  memory        String
+
+  submittedAt DateTime @default(now())
+}
+
 model JSolvedUsers {
   user_id    String
   problem_id Int
@@ -63,10 +80,11 @@ model Problem {
   difficulty   String
   tags         JunctionTags[]
   users_solved JSolvedUsers[]
+  submissions  Submission[]
   testcases    Testcase[]
-  points    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  points       Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model Testcase {
@@ -127,12 +145,12 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-model Leaderboard{
+model Leaderboard {
   username String @unique
-  user_id String @unique
- 
+  user_id  String @unique
+
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  
+
   codechefusername           String? @unique
   codeforcesusername         String? @unique
   leetcodeusername           String? @unique

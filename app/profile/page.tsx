@@ -11,30 +11,25 @@ import { getLeaderboardProfile, getUserfromEmail } from "@/actions/user";
 import UserForm from "@/components/profile/newuserform";
 
 export default function Page() {
-  const { data: session } = useSession();
   const { email, id } = useUser();
 
-  const userEmail = session?.user?.email;
-  const [userid,setUserid] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   useEffect(() => {
-    console.log("This came from the useUser: ", id, email);
+    // console.log("This came from the useUser: ", id, email);
     async function fetchProfile() {
-      if (userEmail) {
-        const userx = await getLeaderboardProfile(userEmail);
-        const useridx = await getUserfromEmail(userEmail);
+      if (email) {
+        const userx = await getLeaderboardProfile(email);
         setUser(userx);
-        setUserid(useridx);
       }
     }
     fetchProfile();
-  }, [userEmail, id, email]);
+  }, [id, email]);
 
   if (!user) {
-    console.log(userid)
+    // console.log(id)
     return (
       <div className="">
-        <UserForm user_id=""/>
+        <UserForm user_id={id||""}/>
       </div>
     );
   }

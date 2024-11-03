@@ -19,7 +19,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const getUserId = async () => {
       if (email) {
         const user = await getUserfromEmail(email);
-        console.log("Searching for user found this: ", user);
+        // console.log("Searching for user found this: ", user);
         setId(user!);
       }
     };

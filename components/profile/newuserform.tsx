@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-
   FormField,
   FormItem,
   FormLabel,
@@ -19,41 +18,32 @@ import { Input } from "@/components/ui/input";
 import { checkUserProfile, createProfile } from "@/actions/user";
 
 const formSchema = z.object({
-  
   username: z.string().min(1),
   codechefusername: z.string().min(1),
   leetcodeusername: z.string().min(1),
   codeforcesusername: z.string().min(1),
 });
 
-export default function UserForm(user_id:string) {
+export default function UserForm({ user_id }: { user_id: string }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues:{
-        username: "",
-        codechefusername: "",
-        leetcodeusername: "",
-        codeforcesusername: "",
-    }
+    defaultValues: {
+      username: "",
+      codechefusername: "",
+      leetcodeusername: "",
+      codeforcesusername: "",
+    },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const res = await checkUserProfile(values);
-      if (res.error){
-        toast.error(res.error)
-
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        await createProfile({ user_id, ...values });
+        toast.success("Profile created successfully");
       }
-      else{
-        console.log(values);
-        console.log(user_id);
-        await createProfile({user_id:user_id, ...values});
-      }
-    //   toast(
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-    //     </pre>
-    //   );
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
@@ -61,7 +51,6 @@ export default function UserForm(user_id:string) {
   }
 
   return (
-
     <div className="w-full h-screen flex justify-center items-center">
       <div className="p-8 rounded-lg border-4 bg-gray-100 shadow-lg w-[400px]">
         <Form {...form}>

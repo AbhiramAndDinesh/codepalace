@@ -53,24 +53,21 @@ export const checkUserProfile = async ({
         leetcodeusername,
       },
     });
+    let error = "";
+    if (exusername) {
+      error += `username ${username} already taken`;
+    }
+    if (exleetcodeusername) {
+      error += `\nleetcodeusername ${leetcodeusername} already taken`;
+    }
+    if (excodeforcesusername) {
+      error += `\ncodechefusername ${codechefusername} already taken`;
+    }
+    if (excodechefusername) {
+      error += `\ncodeforcesusername ${codeforcesusername} already taken`;
+    }
 
-    const obj: {
-      username: boolean;
-      leetcodeusername: boolean;
-      codeforcesusername: boolean;
-      codechefusername: boolean;
-    } = {
-      username: false,
-      leetcodeusername: false,
-      codechefusername: false,
-      codeforcesusername: false,
-    };
-    if (exusername) obj.username = true;
-    if (exleetcodeusername) obj.leetcodeusername = true;
-    if (excodeforcesusername) obj.codeforcesusername = true;
-    if (excodechefusername) obj.codechefusername = true;
-
-    return obj;
+    return { error };
   } catch (error) {
     console.log("Error actions/user.ts > checkUserProfile", error);
   }

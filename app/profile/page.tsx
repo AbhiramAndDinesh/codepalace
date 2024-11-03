@@ -7,6 +7,7 @@ import CodechefUsernameForm from "@/components/profile/ccusername-form";
 import CodeforcesUsernameForm from "@/components/profile/cfusername-form";
 import LeetcodeUsernameForm from "@/components/profile/lcusername-form";
 import { getLeaderboardProfile } from "@/actions/user";
+import UserForm from "@/components/profile/newuserform";
 export default function Page() {
   const { data: session } = useSession();
   const userEmail = session?.user?.email;
@@ -24,8 +25,8 @@ export default function Page() {
 
   if (!user) {
     return (
-      <div className=" h-screen flex items-center justify-center text-[100px]">
-        Loading...
+      <div className="">
+        <UserForm/>
       </div>
     );
   }

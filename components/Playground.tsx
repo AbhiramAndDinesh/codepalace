@@ -17,6 +17,8 @@ import {
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
 import { executeSubmit } from "@/actions/code";
+import { set } from "react-hook-form";
+import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
 const Playground = ({
   language,
@@ -32,6 +34,7 @@ const Playground = ({
     // @ts-expect-error error will not occur
   >(language);
   const { data: session } = useSession();
+  const [successfullsolved, setSuccessfullsolved] = useState(false);
 
   useEffect(() => {
     const createStorage = () => {
@@ -73,7 +76,9 @@ const Playground = ({
       localStorage.setItem(`${problem_id}`, JSON.stringify(newCode));
     }
   }, [effectChain, code, lang, problem_id]);
-
+  const toggle = () => {
+    setSuccessfullsolved(!successfullsolved);
+  };
   const handleSubmit = () => {
     // console.log(code, problem_id, session?.user?.email, lang);
     executeSubmit({
@@ -84,6 +89,7 @@ const Playground = ({
     }).then((res) => {
       if (res?.failed.length === 0) {
         alert("All good");
+        setSuccessfullsolved(true);
       } else {
         alert(`${res?.failed.length}/${res?.total_testcases} failed`);
       }
@@ -92,6 +98,9 @@ const Playground = ({
 
   return (
     <div className="w-full h-full">
+      {successfullsolved && (
+        <Fireworks className="" autorun={{ speed: 7, duration: 750 }} />
+      )}
       <Select onValueChange={(e) => setLang(e)} defaultValue={lang}>
         <SelectTrigger className="w-[180px] bg-white">
           <SelectValue placeholder="Theme" />

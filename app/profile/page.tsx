@@ -1,22 +1,40 @@
+"use client";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
-import { prisma } from "@/prisma";
 import UsernameForm from "@/components/profile/username-form";
 import CodechefUsernameForm from "@/components/profile/ccusername-form";
 import CodeforcesUsernameForm from "@/components/profile/cfusername-form";
 import LeetcodeUsernameForm from "@/components/profile/lcusername-form";
-export default async function page() {
-  const profile = await prisma.leaderboard.findUnique({
-    where: {
-      user_id: "cm2yqqbd5000010h3r0aqodh9",
-    },
-  });
+import { getLeaderboardProfile } from "@/actions/user";
+export default function Page() {
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email;
+  const [user, setUser] = useState<any>(null);
+  console.log("userEmail", userEmail);
+  useEffect(() => {
+    async function fetchProfile() {
+      if (userEmail) {
+        const userx = await getLeaderboardProfile(userEmail);
+        setUser(userx);
+      }
+    }
+    fetchProfile();
+  }, [userEmail]);
+
+  if (!user) {
+    return (
+      <div className=" h-screen flex items-center justify-center text-[100px]">
+        Loading...
+      </div>
+    );
+  }
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center">
-      <UsernameForm initialData={profile} user_id={profile?.user_id} />
-      <CodechefUsernameForm initialData={profile} user_id={profile?.user_id} />
-      <CodeforcesUsernameForm initialData={profile} user_id={profile?.user_id} />
-      <LeetcodeUsernameForm initialData={profile} user_id={profile?.user_id} />
+      <UsernameForm initialData={user} user_id={user?.user_id} />
+      <CodechefUsernameForm initialData={user} user_id={user?.user_id} />
+      <CodeforcesUsernameForm initialData={user} user_id={user?.user_id} />
+      <LeetcodeUsernameForm initialData={user} user_id={user?.user_id} />
     </div>
   );
 }

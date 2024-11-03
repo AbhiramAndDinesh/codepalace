@@ -1,6 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useUser } from "@/context/userContext";
 
 import UsernameForm from "@/components/profile/username-form";
 import CodechefUsernameForm from "@/components/profile/ccusername-form";
@@ -8,12 +9,15 @@ import CodeforcesUsernameForm from "@/components/profile/cfusername-form";
 import LeetcodeUsernameForm from "@/components/profile/lcusername-form";
 import { getLeaderboardProfile } from "@/actions/user";
 import UserForm from "@/components/profile/newuserform";
+
 export default function Page() {
   const { data: session } = useSession();
+  const { email, id } = useUser();
+
   const userEmail = session?.user?.email;
   const [user, setUser] = useState<any>(null);
-  console.log("userEmail", userEmail);
   useEffect(() => {
+    console.log("This came from the useUser: ", id, email);
     async function fetchProfile() {
       if (userEmail) {
         const userx = await getLeaderboardProfile(userEmail);
@@ -21,12 +25,12 @@ export default function Page() {
       }
     }
     fetchProfile();
-  }, [userEmail]);
+  }, [userEmail, id, email]);
 
   if (!user) {
     return (
       <div className="">
-        <UserForm/>
+        <UserForm />
       </div>
     );
   }

@@ -26,6 +26,7 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
         <h1 className="text-3xl"> Loading...</h1>
       </div>
     );
+
   return (
     <div className="min-h-screen">
       <form
@@ -41,6 +42,7 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
           Sign in
         </button>
       </form>
+
       {solved && <div className="bg-green-500">Solved</div>}
       <Tabs defaultValue="question" className="w-full h-[87vh]">
         <TabsList>

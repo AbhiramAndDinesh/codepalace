@@ -16,7 +16,8 @@ import {
 
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
-import { executeSubmit } from "@/actions/code";
+import { executeRun, executeSubmit } from "@/actions/code";
+import { Textarea } from "./ui/textarea";
 
 const Playground = ({
   language,
@@ -31,6 +32,9 @@ const Playground = ({
     "c" | "c++" | "python" | "java" | "javascript" | "go"
     // @ts-expect-error error will not occur
   >(language);
+  const [stdin, setStdin] = useState("");
+  const [stdout, setStdout] = useState("");
+
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -90,6 +94,18 @@ const Playground = ({
     });
   };
 
+  const handleRun = () => {
+    console.log("Running run", { code, lang, stdin });
+    executeRun({
+      source_code: code,
+      language: lang,
+      stdin: stdin,
+    }).then((res) => {
+      console.log("Result: ", res);
+      setStdout(res);
+    });
+  };
+
   return (
     <div className="w-full h-full">
       <Select onValueChange={(e) => setLang(e)} defaultValue={lang}>
@@ -124,12 +140,20 @@ const Playground = ({
             }}
             language={lang}
           />
-          <Button
-            className="bg-green-600 hover:bg-green-200 hover:text-green-600 font-[500] text-white px-2 py-1 rounded-sm absolute bottom-1 right-1"
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
+          <div className="flex gap-2 absolute bottom-1 right-1">
+            <Button
+              className="bg-blue-600 hover:bg-blue-200 hover:text-blue-600 font-[500] text-white px-2 py-1 rounded-sm"
+              onClick={handleRun}
+            >
+              Run
+            </Button>
+            <Button
+              className="bg-green-600 hover:bg-green-200 hover:text-green-600 font-[500] text-white px-2 py-1 rounded-sm"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </div>
         </ResizablePanel>
         <ResizableHandle
           withHandle
@@ -137,11 +161,28 @@ const Playground = ({
         />
         <ResizablePanel
           defaultSize={40}
-          className="bg-red-500"
+          className="bg-white"
           minSize={20}
           maxSize={80}
         >
-          {session?.user?.email}
+          <Textarea
+            className="bg-gray-200"
+            onChange={(e) => {
+              setStdin(e.target.value);
+            }}
+          />
+
+          {stdout && (
+            <div className="bg-gray-500">
+              <h3>Output:</h3>
+              <Textarea
+                disabled
+                className="focus:border-none border-none hover:cursor-default"
+              >
+                {stdout}
+              </Textarea>
+            </div>
+          )}
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

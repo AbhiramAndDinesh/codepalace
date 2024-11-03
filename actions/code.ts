@@ -106,3 +106,48 @@ export const executeSubmit = async ({
     console.log(error);
   }
 };
+
+export const executeRun = async ({
+  source_code,
+  language,
+  stdin,
+}: {
+  source_code: string;
+  language: "go" | "python" | "java" | "javascript" | "c" | "c++";
+  stdin: string;
+}) => {
+  const languageId: {
+    c: number;
+    go: number;
+    python: number;
+    java: number;
+    javascript: number;
+    "c++": number;
+  } = {
+    "c++": 54,
+    c: 50,
+    go: 22,
+    python: 71,
+    java: 62,
+    javascript: 63,
+  };
+  const language_id = languageId[language];
+  const response = await axios.request({
+    method: "POST",
+    url: "http://43.204.98.127:2358/submissions",
+    params: {
+      base64_encoded: "false",
+      wait: "true",
+      fields: "stdout",
+    },
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      source_code,
+      language_id,
+      stdin,
+    },
+  });
+  return response.data.stdout;
+};

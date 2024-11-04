@@ -87,7 +87,7 @@ export default function AnswerForm() {
               name="answer"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Code</FormLabel>
+                  <FormLabel>Answer</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Enter the code here" {...field} />
                   </FormControl>

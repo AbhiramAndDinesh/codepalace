@@ -26,6 +26,7 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
         <h1 className="text-3xl"> Loading...</h1>
       </div>
     );
+  const answer = problem.Answers==null?"No answer":problem.Answers.answer;
   return (
     <div className="min-h-screen">
       <form
@@ -46,6 +47,7 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
         <TabsList>
           <TabsTrigger value="question">Question</TabsTrigger>
           <TabsTrigger value="submissions">Submissions</TabsTrigger>
+          <TabsTrigger value="answer">Answer</TabsTrigger>
         </TabsList>
         <TabsContent value="question" className="h-full">
           <ResizablePanelGroup direction="horizontal">
@@ -67,6 +69,12 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
           </ResizablePanelGroup>
         </TabsContent>
         <TabsContent value="submission">Change your password here.</TabsContent>
+        <TabsContent value="answer">
+            <p>
+                {answer}
+            </p>
+        </TabsContent>
+
       </Tabs>
     </div>
   );

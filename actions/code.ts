@@ -106,3 +106,20 @@ export const executeSubmit = async ({
     console.log(error);
   }
 };
+
+
+export const getAnswer = async (problem_id: number) => {
+  try{
+    const res = await prisma.answers.findUnique({
+      where:{
+        problemid: problem_id
+      },
+      select:{
+        answer:true
+      }
+    })
+    return res;
+  }catch(error){
+    console.log("error in /actions/admin/answer.ts > getAnswer",error);
+  }
+}

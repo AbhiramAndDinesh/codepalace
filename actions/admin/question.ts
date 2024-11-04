@@ -39,7 +39,15 @@ export const getQuestionBySlug = async (slug: string) => {
       where: {
         slug,
       },
+      include: {
+        Answers: {
+          select: {
+            answer: true,
+          },
+        },
+      },
     });
+    console.log(question);
     return question;
   } catch (error) {
     console.log("Error action/admin/question.ts > getQuestionBySlug", error);

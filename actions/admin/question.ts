@@ -47,7 +47,6 @@ export const getQuestionBySlug = async (slug: string) => {
         },
       },
     });
-    console.log(question);
     return question;
   } catch (error) {
     console.log("Error action/admin/question.ts > getQuestionBySlug", error);

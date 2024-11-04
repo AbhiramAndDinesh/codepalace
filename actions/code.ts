@@ -108,18 +108,30 @@ export const executeSubmit = async ({
 };
 
 
-export const getAnswer = async (problem_id: number) => {
+
+export const getSubmissions = async(problem_id:number,user_id:string)=>{
   try{
-    const res = await prisma.answers.findUnique({
-      where:{
-        problemid: problem_id
-      },
-      select:{
-        answer:true
-      }
-    })
-    return res;
-  }catch(error){
-    console.log("error in /actions/admin/answer.ts > getAnswer",error);
+      const submissions = await prisma.submission.findMany({
+          where:{
+              problem_id:problem_id,
+              user_id:user_id
+          },
+          select:{
+              submission_id:true,
+              code:true,
+              accepted:true,
+              failed_cases:true,
+              time:true,
+              memory:true
+          },
+          orderBy:{
+              submittedAt:"desc"
+          }
+      })
+      // console.log(submissions);
+      return submissions;
+  }
+  catch(error){
+      console.log("error in /actions/submissions.ts > getSubmission",error);
   }
 }

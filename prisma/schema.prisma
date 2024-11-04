@@ -24,6 +24,8 @@ model User {
   score         Int             @default(0)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+
+  collections JUserCollection[]
 }
 
 model Account {
@@ -172,4 +174,23 @@ model Answers{
   problemid Int @unique
   answer String
   problem Problem @relation(fields: [problemid], references: [problem_id], onDelete: Cascade)
+}
+
+model Collection{
+  collection_id String@id @default(cuid())
+  name String 
+  isPublic Boolean @default(false)
+  saved Int @default(0)
+  owner_id String 
+  users JUserCollection[]
+}
+
+model JUserCollection{
+  user_id String 
+  collection_id String 
+  isOwner Boolean @default(false)
+  @@id([user_id,collection_id])
+  collections Collection @relation(fields: [collection_id],references: [collection_id],onDelete: Cascade)
+  users User @relation(fields:[user_id],references: [id],onDelete: Cascade)
+
 }

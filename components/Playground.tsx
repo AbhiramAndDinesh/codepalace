@@ -185,9 +185,10 @@ const Playground = ({
               <h3>Output:</h3>
               <Textarea
                 disabled
+                defaultValue={stdout}
                 className="focus:border-none border-none hover:cursor-default"
               >
-                {stdout}
+                
               </Textarea>
             </div>
           )}

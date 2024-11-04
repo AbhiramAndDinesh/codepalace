@@ -82,9 +82,12 @@ model Problem {
   users_solved JSolvedUsers[]
   submissions  Submission[]
   testcases    Testcase[]
+
   points       Int
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+
+  Answers Answers?
 }
 
 model Testcase {
@@ -162,4 +165,11 @@ model Leaderboard {
   leetcodeRating             Int?
   leetcodeProblemsSolved     Int?
   leetcodeContestsAttended   Int?
+}
+
+model Answers{
+  id String @id @default(cuid())
+  problemid Int @unique
+  answer String
+  problem Problem @relation(fields: [problemid], references: [problem_id], onDelete: Cascade)
 }

@@ -151,3 +151,32 @@ export const executeRun = async ({
   });
   return response.data.stdout;
 };
+
+
+
+export const getSubmissions = async(problem_id:number,user_id:string)=>{
+  try{
+      const submissions = await prisma.submission.findMany({
+          where:{
+              problem_id:problem_id,
+              user_id:user_id
+          },
+          select:{
+              submission_id:true,
+              code:true,
+              accepted:true,
+              failed_cases:true,
+              time:true,
+              memory:true
+          },
+          orderBy:{
+              submittedAt:"desc"
+          }
+      })
+      // console.log(submissions);
+      return submissions;
+  }
+  catch(error){
+      console.log("error in /actions/submissions.ts > getSubmission",error);
+  }
+}

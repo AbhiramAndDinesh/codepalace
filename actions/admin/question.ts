@@ -39,6 +39,13 @@ export const getQuestionBySlug = async (slug: string) => {
       where: {
         slug,
       },
+      include: {
+        Answers: {
+          select: {
+            answer: true,
+          },
+        },
+      },
     });
     return question;
   } catch (error) {

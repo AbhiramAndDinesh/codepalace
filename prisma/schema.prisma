@@ -1,31 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id            String          @id @default(cuid())
+  id            String            @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String            @unique
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  score         Int               @default(0)
+  streak        Int               @default(0)
   accounts      Account[]
-  submissions   Submission[]
-  sessions      Session[]
-  problems      JSolvedUsers[]
-  leaderboard   Leaderboard?
-  streak        Int             @default(0)
-  // Optional for WebAuthn support
   Authenticator Authenticator[]
-  score         Int             @default(0)
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-
-  collections JUserCollection[]
+  problems      JSolvedUsers[]
+  collections   JUserCollection[]
+  leaderboard   Leaderboard?
+  sessions      Session[]
+  submissions   Submission[]
 }
 
 model Account {
@@ -40,36 +38,32 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
 
 model Submission {
-  submission_id String  @id @default(cuid())
+  submission_id String   @id @default(cuid())
   problem_id    Int
   user_id       String
-  user          User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  problem       Problem @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
   code          String
   accepted      Boolean
   failed_cases  Int
   time          String
   memory        String
-
-  submittedAt DateTime @default(now())
+  submittedAt   DateTime @default(now())
+  problem       Problem  @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model JSolvedUsers {
   user_id    String
   problem_id Int
-
-  problem Problem @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
-  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  problem    Problem @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
+  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, problem_id])
 }
@@ -80,16 +74,14 @@ model Problem {
   slug         String         @unique
   statement    String
   difficulty   String
-  tags         JunctionTags[]
-  users_solved JSolvedUsers[]
-  submissions  Submission[]
-  testcases    Testcase[]
-
-  points       Int
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-
-  Answers Answers?
+  points       Int
+  Answers      Answers?
+  users_solved JSolvedUsers[]
+  tags         JunctionTags[]
+  submissions  Submission[]
+  testcases    Testcase[]
 }
 
 model Testcase {
@@ -108,10 +100,10 @@ model Tag {
 }
 
 model JunctionTags {
-  problem    Problem @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
   problem_id Int
-  tag        Tag     @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
   tag_id     Int
+  problem    Problem @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
+  tag        Tag     @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
 
   @@id([problem_id, tag_id])
 }
@@ -120,10 +112,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -134,7 +125,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -144,18 +134,14 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
 }
 
 model Leaderboard {
-  username String @unique
-  user_id  String @unique
-
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
+  username                   String  @unique
+  user_id                    String  @unique
   codechefusername           String? @unique
   codeforcesusername         String? @unique
   leetcodeusername           String? @unique
@@ -167,30 +153,31 @@ model Leaderboard {
   leetcodeRating             Int?
   leetcodeProblemsSolved     Int?
   leetcodeContestsAttended   Int?
+  user                       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
-model Answers{
-  id String @id @default(cuid())
-  problemid Int @unique
-  answer String
-  problem Problem @relation(fields: [problemid], references: [problem_id], onDelete: Cascade)
+model Answers {
+  id        String  @id @default(cuid())
+  problemid Int     @unique
+  answer    String
+  problem   Problem @relation(fields: [problemid], references: [problem_id], onDelete: Cascade)
 }
 
-model Collection{
-  collection_id String@id @default(cuid())
-  name String 
-  isPublic Boolean @default(false)
-  saved Int @default(0)
-  owner_id String 
-  users JUserCollection[]
+model Collection {
+  collection_id String            @id @default(cuid())
+  name          String
+  isPublic      Boolean           @default(false)
+  saved         Int               @default(0)
+  owner_id      String
+  users         JUserCollection[]
 }
 
-model JUserCollection{
-  user_id String 
-  collection_id String 
-  isOwner Boolean @default(false)
-  @@id([user_id,collection_id])
-  collections Collection @relation(fields: [collection_id],references: [collection_id],onDelete: Cascade)
-  users User @relation(fields:[user_id],references: [id],onDelete: Cascade)
+model JUserCollection {
+  user_id       String
+  collection_id String
+  isOwner       Boolean    @default(false)
+  collections   Collection @relation(fields: [collection_id], references: [collection_id], onDelete: Cascade)
+  users         User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  @@id([user_id, collection_id])
 }

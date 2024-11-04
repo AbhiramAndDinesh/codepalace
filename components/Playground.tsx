@@ -16,14 +16,9 @@ import {
 
 import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
-<<<<<<< HEAD
 import { executeRun, executeSubmit } from "@/actions/code";
 import { Textarea } from "./ui/textarea";
-=======
-import { executeSubmit } from "@/actions/code";
-import { set } from "react-hook-form";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
->>>>>>> animation
 
 const Playground = ({
   language,

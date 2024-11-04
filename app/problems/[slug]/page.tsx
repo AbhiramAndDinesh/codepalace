@@ -1,5 +1,4 @@
 import { getQuestionBySlug, userSolved } from "@/actions/admin/question";
-import { signIn } from "@/auth";
 import Playground from "@/components/Playground";
 import {
   ResizableHandle,
@@ -29,47 +28,42 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <div className="min-h-screen">
-      <form
-        action={async () => {
-          "use server";
-          await signIn();
-        }}
-      >
-        <button
-          type="submit"
-          className="bg-black px-2 py-1 rounded-sm text-white"
-        >
-          Sign in
-        </button>
-      </form>
-
-      {solved && <div className="bg-green-500">Solved</div>}
-      <Tabs defaultValue="question" className="w-full h-[87vh]">
-        <TabsList>
-          <TabsTrigger value="question">Question</TabsTrigger>
-          <TabsTrigger value="submissions">Submissions</TabsTrigger>
-        </TabsList>
-        <TabsContent value="question" className="h-full">
-          <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={45} minSize={20}>
-              <div className="w-full bg-blue-200 h-full">
+      <ResizablePanelGroup direction="horizontal" className="min-h-screen">
+        <ResizablePanel defaultSize={45} minSize={20} className="bg-blue-200">
+          <Tabs defaultValue="question">
+            <TabsList className="bg-red-100 w-full flex justify-evenly">
+              <TabsTrigger value="question" className="flex-grow">
+                Question
+              </TabsTrigger>
+              <TabsTrigger value="answer" className="flex-grow">
+                Answer
+              </TabsTrigger>
+              <TabsTrigger value="submissions" className="flex-grow">
+                Submissions
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="question" className="bg-green-200">
+              <div className="w-full h-screen">
                 <h1>{problem.title}</h1>
                 <div dangerouslySetInnerHTML={{ __html: problem.statement }} />
               </div>
-            </ResizablePanel>
-            <ResizableHandle
-              className="w-[5px] hover:bg-blue-500 bg-dark-layer-2"
-              withHandle
-            />
-            <ResizablePanel className="h-full" defaultSize={65} minSize={40}>
-              <div className="w-full h-full p-3 bg-red-400">
-                <Playground language="python" problem_id={problem.problem_id} />
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </TabsContent>
-        <TabsContent value="submission">Change your password here.</TabsContent>
-      </Tabs>
+            </TabsContent>
+            <TabsContent value="answer">Change your password here.</TabsContent>
+            <TabsContent value="submission">
+              Change your password here.
+            </TabsContent>
+          </Tabs>
+        </ResizablePanel>
+        <ResizableHandle
+          className="w-[5px] hover:bg-blue-500 bg-dark-layer-2"
+          withHandle
+        />
+        <ResizablePanel className="h-screen" defaultSize={65} minSize={40}>
+          <div className="w-full h-full p-3 bg-red-400">
+            <Playground language="python" problem_id={problem.problem_id} />
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };

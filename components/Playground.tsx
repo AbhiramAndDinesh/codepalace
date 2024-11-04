@@ -186,9 +186,8 @@ const Playground = ({
               <Textarea
                 disabled
                 className="focus:border-none border-none hover:cursor-default"
-              >
-                {stdout}
-              </Textarea>
+                defaultValue={stdout}
+              />
             </div>
           )}
         </ResizablePanel>

@@ -1,11 +1,17 @@
 import {
   addProblemToCollection,
   getCollectionbySlug,
+  getCollectionQuestions,
   isOwner,
   isSavedCollection,
 } from "@/actions/collection";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
+import { columns_owner } from "./columns-owner";
 import { auth } from "@/auth";
 import CollectionButton from "./_components/collectionbutton";
+import { prisma } from "@/prisma";
+import { getQuestions } from "@/actions/question";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await auth();
@@ -19,31 +25,15 @@ export default async function Page({ params }: { params: { slug: string } }) {
     return <div>Collection doesnt exists</div>;
   }
   const owner = await isOwner(user_id, collectiondata.collection_id);
-  // console.log(collectiondata);
-  // console.log(owner);
-  // const arr = [
-  //   {
-  //     collection_id: "cm35j41iw00036un6n3guzm90",
-  //     problem_id: 1,
-  //   },
-  //   {
-  //     collection_id: "cm35j41iw00036un6n3guzm90",
-  //     problem_id: 2,
-  //   },
-  //   {
-  //     collection_id: "cm35j41iw00036un6n3guzm90",
-  //     problem_id: 3,
-  //   },
-  // ];
-  // await addProblemToCollection(arr);
   const saved = await isSavedCollection(user_id, collectiondata.collection_id);
-  console.log(saved);
   if (saved === undefined) {
     return;
   }
   if (!owner && !collectiondata.isPublic) {
     return <div>This is a private Collection</div>;
   }
+  const problems = await getCollectionQuestions(collectiondata.collection_id);
+  console.log(problems);
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center">
       <p>Collection Name :{collectiondata?.name}</p>
@@ -53,8 +43,14 @@ export default async function Page({ params }: { params: { slug: string } }) {
         user_id={user_id}
         collection_id={collectiondata.collection_id}
       />
-      {/* {owner ? <Button>Delete</Button> : <Button>Unsave</Button>} */}
       <p>Problems: TODO</p>
+      <div className="w-[1000px]">
+        {owner ? (
+          <DataTable columns={columns_owner} data={problems} />
+        ) : (
+          <DataTable columns={columns} data={problems} />
+        )}
+      </div>
     </div>
   );
 }

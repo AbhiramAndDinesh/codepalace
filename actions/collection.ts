@@ -330,3 +330,48 @@ export const addProblemToCollection = async (
     });
   }
 };
+
+export const deleteProblemFromCollection = async (
+  collection_id: string,
+  problem_id: number,
+) => {
+  try {
+    await prisma.jCollectionProblem.deleteMany({
+      where: {
+        collection_id,
+        problem_id,
+      },
+    });
+  } catch (error) {
+    console.log(
+      "Error in actions/collection.ts > deleteProblemFromCollection",
+      error,
+    );
+  }
+};
+
+export const getCollectionQuestions = async (collection_id: string) => {
+  try {
+    const question_ids = await prisma.jCollectionProblem.findMany({
+      where: {
+        collection_id,
+      },
+      include: {
+        problem: true,
+      },
+    });
+    const questions = [];
+    for (let i = 0; i < question_ids.length; i++) {
+      questions.push({
+        ...question_ids[i].problem,
+        collection_id,
+      });
+    }
+    return questions;
+  } catch (error) {
+    console.log(
+      "Error in actions/collection.ts > getCollectionQuetions",
+      error,
+    );
+  }
+};

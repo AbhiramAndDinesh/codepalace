@@ -3,7 +3,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { MultiSelect } from "./_components/MultiSelect";
+import { MultiSelect } from "@/components/MultiSelect";
 import { Cat, Dog, Fish, Rabbit, Turtle } from "lucide-react";
 
 const frameworksList = [

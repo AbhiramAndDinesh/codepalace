@@ -1,5 +1,4 @@
 "use client";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/userContext";
 
@@ -7,7 +6,7 @@ import UsernameForm from "@/components/profile/username-form";
 import CodechefUsernameForm from "@/components/profile/ccusername-form";
 import CodeforcesUsernameForm from "@/components/profile/cfusername-form";
 import LeetcodeUsernameForm from "@/components/profile/lcusername-form";
-import { getLeaderboardProfile, getUserfromEmail } from "@/actions/user";
+import { getLeaderboardProfile } from "@/actions/user";
 import UserForm from "@/components/profile/newuserform";
 
 export default function Page() {
@@ -29,7 +28,7 @@ export default function Page() {
     // console.log(id)
     return (
       <div className="">
-        <UserForm user_id={id||""}/>
+        <UserForm user_id={id || ""} />
       </div>
     );
   }

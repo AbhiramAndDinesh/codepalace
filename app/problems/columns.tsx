@@ -1,7 +1,9 @@
 "use client";
+import { useState } from "react";
 
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import { MultiSelect } from "@/components/MultiSelect";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -43,6 +45,19 @@ export const columns: ColumnDef<Problem>[] = [
         <div className={`${background} px-2 py-1 text-sm rounded-sm inline`}>
           {value}
         </div>
+      );
+    },
+  },
+  {
+    header: "fn",
+    cell: ({ row }) => {
+      return (
+        <MultiSelect
+          onValueChange={() => {}}
+          problem_id={row.original.problem_id}
+          placeholder="Select frameworks"
+          variant="inverted"
+        />
       );
     },
   },

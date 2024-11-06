@@ -183,6 +183,30 @@ export const getUserPrivateCollections = async ({
   }
 };
 
+export const getUserPrivateCollections2 = async ({
+  user_id,
+}: {
+  user_id: string;
+}) => {
+  try {
+    const userCollections = await prisma.collection.findMany({
+      where: {
+        owner_id: user_id,
+      },
+      select: {
+        collection_id: true,
+        name: true,
+      },
+    });
+    return userCollections;
+  } catch (error) {
+    console.log(
+      "Error in actions/collection.ts > getUserSavedCollections",
+      error,
+    );
+  }
+};
+
 export const getUserSavedCollections = async ({
   user_id,
 }: {
@@ -284,21 +308,17 @@ export const isSavedCollection = async (
   }
 };
 
-export interface JcollectionProblemitem {
-  collection_id: string;
-  problem_id: number;
-}
-
 export const addProblemToCollection = async (
-  values: JcollectionProblemitem[],
+  values: string[],
+  problem_id: number,
 ) => {
   if (values.length > 0) {
-    values.map(async (value: JcollectionProblemitem) => {
+    values.map(async (value) => {
       try {
         await prisma.jCollectionProblem.create({
           data: {
-            collection_id: value.collection_id,
-            problem_id: value.problem_id,
+            collection_id: value,
+            problem_id,
           },
         });
       } catch (error) {

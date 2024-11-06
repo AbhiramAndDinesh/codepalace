@@ -5,13 +5,14 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { auth } from "@/auth";
+import { auth, signIn } from "@/auth";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getSubmissions } from "@/actions/code";
 
 const ProblemPage = async ({ params }: { params: { slug: string } }) => {
   const problem = await getQuestionBySlug((await params).slug);
-  let session = await auth();
+  const session = await auth();
   let solved = false;
   let submissions: any[] = [];
   if (session?.user && problem) {
@@ -19,8 +20,8 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
       user_id: session.user.id!,
       problem_id: problem?.problem_id,
     });
-    submissions = (await getSubmissions(problem.problem_id, session.user.id!)) || [];
-
+    submissions =
+      (await getSubmissions(problem.problem_id, session.user.id!)) || [];
   }
 
   if (!problem)
@@ -29,7 +30,7 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
         <h1 className="text-3xl"> Loading...</h1>
       </div>
     );
-  const answer = problem.Answers==null?"No answer":problem.Answers.answer;
+  const answer = problem.Answers == null ? "No answer" : problem.Answers.answer;
   return (
     <div className="min-h-screen">
       <form
@@ -54,7 +55,6 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
         </TabsList>
         <TabsContent value="question" className="h-full">
           <ResizablePanelGroup direction="horizontal">
-
             <ResizablePanel defaultSize={45} minSize={20}>
               <div className="w-full bg-blue-200 h-full">
                 <h1>{problem.title}</h1>
@@ -74,27 +74,21 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
         </TabsContent>
         <TabsContent value="submissions">
           <div className="flex flex-col items-center">
-          {
-            submissions.map((item)=>{
-              return(
+            {submissions.map((item) => {
+              return (
                 <div className="flex gap-4 text-black" key={item.submission_id}>
                   <p>{item.accepted}</p>
                   <p>{item.failed_cases}</p>
                   <p>{item.time}</p>
                   <p>{item.memory}</p>
                 </div>
-              )
-            })
-          }
+              );
+            })}
           </div>
-          
         </TabsContent>
         <TabsContent value="answer">
-            <p>
-                {answer}
-            </p>
+          <p>{answer}</p>
         </TabsContent>
-
       </Tabs>
     </div>
   );

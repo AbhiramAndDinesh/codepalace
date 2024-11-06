@@ -187,14 +187,7 @@ const Playground = ({
                 disabled
                 defaultValue={stdout}
                 className="focus:border-none border-none hover:cursor-default"
-<<<<<<< HEAD
-                defaultValue={stdout}
               />
-=======
-              >
-                
-              </Textarea>
->>>>>>> 6c21b1260f91f0e33e7d2186aee827d118386ab5
             </div>
           )}
         </ResizablePanel>

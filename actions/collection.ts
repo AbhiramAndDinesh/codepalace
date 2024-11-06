@@ -35,7 +35,16 @@ export const saveCollection = async (
       data: {
         user_id: user_id,
         collection_id: collection_id,
-        isOwner: false,
+      },
+    });
+    await prisma.collection.update({
+      where: {
+        collection_id,
+      },
+      data: {
+        saved: {
+          increment: 1,
+        },
       },
     });
   } catch (error) {
@@ -58,25 +67,16 @@ export const unsaveCollection = async (
         collection_id: collection_id,
       },
     });
-    const saved_ = await prisma.collection.findUnique({
+    await prisma.collection.update({
       where: {
         collection_id: collection_id,
       },
-      select: {
-        saved: true,
+      data: {
+        saved: {
+          decrement: 1,
+        },
       },
     });
-    if (saved_) {
-      const savedcount = saved_.saved;
-      await prisma.collection.update({
-        where: {
-          collection_id: collection_id,
-        },
-        data: {
-          saved: savedcount - 1,
-        },
-      });
-    }
     return { success: true, status: 200 };
   } catch (error) {
     console.log(
@@ -130,26 +130,48 @@ export const makePublic = async ({
   }
 };
 
+export const makePrivate = async ({
+  user_id,
+  collection_id,
+}: {
+  user_id: string;
+  collection_id: string;
+}) => {
+  try {
+    const check = await isOwner(user_id, collection_id);
+    if (!check) {
+      return;
+    }
+    await prisma.jUserCollection.deleteMany({
+      where: {
+        collection_id,
+      },
+    });
+    await prisma.collection.update({
+      where: {
+        collection_id,
+      },
+      data: {
+        isPublic: false,
+      },
+    });
+  } catch (error) {
+    console.log("Error in actions/collection.ts > makePrivate", error);
+  }
+};
+
 export const getUserPrivateCollections = async ({
   user_id,
 }: {
   user_id: string;
 }) => {
   try {
-    const userCollections = await prisma.jUserCollection.findMany({
+    const userCollections = await prisma.collection.findMany({
       where: {
-        user_id,
-        isOwner: true,
-      },
-      include: {
-        collections: true,
+        owner_id: user_id,
       },
     });
-    const collections = [];
-    for (let i = 0; i < userCollections.length; i++) {
-      collections.push(userCollections[i].collections);
-    }
-    return collections;
+    return userCollections;
   } catch (error) {
     console.log(
       "Error in actions/collection.ts > getUserSavedCollections",
@@ -167,7 +189,6 @@ export const getUserSavedCollections = async ({
     const userCollections = await prisma.jUserCollection.findMany({
       where: {
         user_id,
-        isOwner: false,
       },
       include: {
         collections: true,
@@ -219,5 +240,43 @@ export const getTopCollections = async ({}) => {
     return collections;
   } catch (error) {
     console.log("Error in actions/collection.ts >getTopCollections", error);
+  }
+};
+
+export const getCollectionbySlug = async (slug: string) => {
+  try {
+    const res = await prisma.collection.findUnique({
+      where: {
+        slug: slug,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(
+      "Error in finding collectiond actions>collection>getCollectionbySlug",
+      error,
+    );
+  }
+};
+
+export const isSavedCollection = async (
+  user_id: string,
+  collection_id: string,
+) => {
+  try {
+    const res = await prisma.jUserCollection.findMany({
+      where: {
+        user_id: user_id,
+        collection_id: collection_id,
+      },
+    });
+    if (!res) {
+      return false;
+    } else return true;
+  } catch (error) {
+    console.log(
+      "Error in finding issavedCollection actions>collection>isSavedCollection",
+      error,
+    );
   }
 };

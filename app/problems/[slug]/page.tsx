@@ -1,4 +1,4 @@
-import { getQuestionBySlug, userSolved } from "@/actions/admin/question";
+import { getQuestionBySlug, userSolved } from "@/actions/question";
 import Playground from "@/components/Playground";
 import {
   ResizableHandle,
@@ -57,7 +57,9 @@ const ProblemPage = async ({ params }: { params: { slug: string } }) => {
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={45} minSize={20}>
               <div className="w-full bg-blue-200 h-full">
-                <h1>{problem.title}</h1>
+                <h1>
+                  <code>{problem.title}</code>
+                </h1>
                 <div dangerouslySetInnerHTML={{ __html: problem.statement }} />
               </div>
             </ResizablePanel>

@@ -27,7 +27,6 @@ import { getUserPrivateCollections2 } from "@/actions/collection";
  * Variants for the multi-select component to handle different styles.
  * Uses class-variance-authority (cva) to define different styles based on "variant" prop.
  */
-
 const multiSelectVariants = cva(
   "m-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300",
   {
@@ -110,10 +109,6 @@ interface MultiSelectProps
 
 interface CollectionType {
   name: string;
-  collection_id: string;
-}
-
-export interface JcollectionProblemitem {
   collection_id: string;
 }
 

@@ -214,6 +214,7 @@ export const MultiSelect = React.forwardRef<
                     <CommandItem
                       onSelect={() => {
                         addProblemToCollection(selectedValues, problem_id);
+                        setIsPopoverOpen(false);
                       }}
                       className="flex-1 justify-center cursor-pointer bg-black text-white"
                     >

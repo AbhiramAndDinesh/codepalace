@@ -11,6 +11,7 @@ import { deleteProblemFromCollection } from "@/actions/collection";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -72,10 +73,13 @@ export const columns_owner: ColumnDef<Problem>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <Button
               onClick={() => {
+                const router = useRouter();
+
                 deleteProblemFromCollection(
                   row.original.collection_id,
                   row.original.problem_id,
                 );
+                router.refresh();
               }}
             >
               Delete

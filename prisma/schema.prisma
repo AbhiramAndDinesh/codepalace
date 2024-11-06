@@ -70,19 +70,20 @@ model JSolvedUsers {
 }
 
 model Problem {
-  problem_id   Int            @id @default(autoincrement())
-  title        String         @unique
-  slug         String         @unique
+  problem_id   Int                  @id @default(autoincrement())
+  title        String               @unique
+  slug         String               @unique
   statement    String
   difficulty   String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
   points       Int
   Answers      Answers?
   users_solved JSolvedUsers[]
   tags         JunctionTags[]
   submissions  Submission[]
   testcases    Testcase[]
+  collections  JCollectionProblem[]
 }
 
 model Testcase {
@@ -167,14 +168,15 @@ model Answers {
 }
 
 model Collection {
-  collection_id String            @id @default(cuid())
+  collection_id String               @id @default(cuid())
   name          String
-  isPublic      Boolean           @default(false)
-  saved         Int               @default(0)
+  isPublic      Boolean              @default(false)
+  saved         Int                  @default(0)
   owner_id      String
-  slug          String            @unique
-  users         User              @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  slug          String               @unique
+  users         User                 @relation(fields: [owner_id], references: [id], onDelete: Cascade)
   publicUsers   JUserCollection[]
+  problems      JCollectionProblem[]
 }
 
 model JUserCollection {
@@ -184,4 +186,13 @@ model JUserCollection {
   users         User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, collection_id])
+}
+
+model JCollectionProblem {
+  collection_id String
+  problem_id    Int
+  problem       Problem    @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
+  collection    Collection @relation(fields: [collection_id], references: [collection_id], onDelete: Cascade)
+
+  @@id([collection_id, problem_id])
 }

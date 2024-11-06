@@ -273,8 +273,6 @@ export const isSavedCollection = async (
         collection_id: collection_id,
       },
     });
-    console.log("From sever ");
-    console.log(res, !res);
     if (res.length > 0) {
       return true;
     } else return false;
@@ -283,5 +281,32 @@ export const isSavedCollection = async (
       "Error in finding issavedCollection actions>collection>isSavedCollection",
       error,
     );
+  }
+};
+
+export interface JcollectionProblemitem {
+  collection_id: string;
+  problem_id: number;
+}
+
+export const addProblemToCollection = async (
+  values: JcollectionProblemitem[],
+) => {
+  if (values.length > 0) {
+    values.map(async (value: JcollectionProblemitem) => {
+      try {
+        await prisma.jCollectionProblem.create({
+          data: {
+            collection_id: value.collection_id,
+            problem_id: value.problem_id,
+          },
+        });
+      } catch (error) {
+        console.log(
+          "Error in created jcollectionsproblem actions>collection>jcollectionproblem",
+          error,
+        );
+      }
+    });
   }
 };

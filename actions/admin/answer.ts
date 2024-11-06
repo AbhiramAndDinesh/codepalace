@@ -1,8 +1,6 @@
 "use server";
 
 import { prisma } from "@/prisma";
-import { NextResponse } from "next/server";
-
 interface Answer {
   problemid: number;
   answer: string;

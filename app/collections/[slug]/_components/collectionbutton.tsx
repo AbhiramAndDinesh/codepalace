@@ -5,7 +5,6 @@ import {
   unsaveCollection,
 } from "@/actions/collection";
 import { Button } from "@/components/ui/button";
-import { Divide } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 const CollectionButton = ({
@@ -48,7 +47,7 @@ const CollectionButton = ({
           Delete
         </Button>
       )}
-      {!owner && saved && <Button onClick={handleUnsave}>Unsaved</Button>}
+      {!owner && saved && <Button onClick={handleUnsave}>Unsave</Button>}
       {!owner && !saved && <Button onClick={handleSave}>Save</Button>}
     </div>
   );

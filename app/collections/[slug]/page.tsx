@@ -1,10 +1,10 @@
 import {
+  addProblemToCollection,
   getCollectionbySlug,
   isOwner,
   isSavedCollection,
 } from "@/actions/collection";
 import { auth } from "@/auth";
-import { Button } from "@/components/ui/button";
 import CollectionButton from "./_components/collectionbutton";
 
 export default async function Page({ params }: { params: { slug: string } }) {
@@ -21,6 +21,21 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const owner = await isOwner(user_id, collectiondata.collection_id);
   // console.log(collectiondata);
   // console.log(owner);
+  // const arr = [
+  //   {
+  //     collection_id: "cm35j41iw00036un6n3guzm90",
+  //     problem_id: 1,
+  //   },
+  //   {
+  //     collection_id: "cm35j41iw00036un6n3guzm90",
+  //     problem_id: 2,
+  //   },
+  //   {
+  //     collection_id: "cm35j41iw00036un6n3guzm90",
+  //     problem_id: 3,
+  //   },
+  // ];
+  // await addProblemToCollection(arr);
   const saved = await isSavedCollection(user_id, collectiondata.collection_id);
   console.log(saved);
   if (saved === undefined) {

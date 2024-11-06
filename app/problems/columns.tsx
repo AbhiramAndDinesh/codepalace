@@ -55,7 +55,6 @@ export const columns: ColumnDef<Problem>[] = [
           onValueChange={() => {}}
           problem_id={row.original.problem_id}
           placeholder="Select frameworks"
-          variant="inverted"
         />
       );
     },

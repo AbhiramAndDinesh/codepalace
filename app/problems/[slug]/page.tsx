@@ -18,7 +18,11 @@ interface Submissionstype {
   time: string;
   memory: string;
 }
-const ProblemPage = async ({ params }: { params: { slug: string } }) => {
+const ProblemPage = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
   const problem = await getQuestionBySlug((await params).slug);
   const session = await auth();
   let solved = false;

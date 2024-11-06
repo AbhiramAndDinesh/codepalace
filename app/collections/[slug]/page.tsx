@@ -10,7 +10,11 @@ import { columns_owner } from "./columns-owner";
 import { auth } from "@/auth";
 import CollectionButton from "./_components/collectionbutton";
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const session = await auth();
   if (!session) {
     return <div>User not found sign in!!</div>;
@@ -31,6 +35,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
   const problems = await getCollectionQuestions(collectiondata.collection_id);
   console.log(problems);
+  if (!problems) return;
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center">
       <p>Collection Name :{collectiondata?.name}</p>

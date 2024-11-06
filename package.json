@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/cron.js & next dev",
-    "build": "npx prisma generate && next build",
+    "dev": "next dev",
+    "build": " npx prisma generate && next build",
+    "vercel-build": "npm install --force && npm run build",
     "start": "next start",
     "lint": "next lint"
   },

@@ -6,6 +6,7 @@ import {
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import CollectionButton from "./_components/collectionbutton";
+
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await auth();
   if (!session) {
@@ -18,9 +19,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
     return <div>Collection doesnt exists</div>;
   }
   const owner = await isOwner(user_id, collectiondata.collection_id);
-  console.log(collectiondata);
-  console.log(owner);
+  // console.log(collectiondata);
+  // console.log(owner);
   const saved = await isSavedCollection(user_id, collectiondata.collection_id);
+  console.log(saved);
+  if (saved === undefined) {
+    return;
+  }
   if (!owner && !collectiondata.isPublic) {
     return <div>This is a private Collection</div>;
   }

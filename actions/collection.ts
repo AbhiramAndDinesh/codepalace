@@ -270,9 +270,11 @@ export const isSavedCollection = async (
         collection_id: collection_id,
       },
     });
-    if (!res) {
-      return false;
-    } else return true;
+    console.log("From sever ");
+    console.log(res, !res);
+    if (res.length > 0) {
+      return true;
+    } else return false;
   } catch (error) {
     console.log(
       "Error in finding issavedCollection actions>collection>isSavedCollection",

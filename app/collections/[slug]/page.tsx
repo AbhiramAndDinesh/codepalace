@@ -1,5 +1,4 @@
 import {
-  addProblemToCollection,
   getCollectionbySlug,
   getCollectionQuestions,
   isOwner,
@@ -10,8 +9,6 @@ import { columns } from "./columns";
 import { columns_owner } from "./columns-owner";
 import { auth } from "@/auth";
 import CollectionButton from "./_components/collectionbutton";
-import { prisma } from "@/prisma";
-import { getQuestions } from "@/actions/question";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await auth();

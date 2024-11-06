@@ -1,18 +1,7 @@
 "use client";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
 
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.

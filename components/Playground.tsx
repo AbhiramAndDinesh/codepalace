@@ -79,9 +79,7 @@ const Playground = ({
       localStorage.setItem(`${problem_id}`, JSON.stringify(newCode));
     }
   }, [effectChain, code, lang, problem_id]);
-  const toggle = () => {
-    setSuccessfullsolved(!successfullsolved);
-  };
+
   const handleSubmit = () => {
     // console.log(code, problem_id, session?.user?.email, lang);
     executeSubmit({
@@ -116,7 +114,12 @@ const Playground = ({
       {successfullsolved && (
         <Fireworks className="" autorun={{ speed: 7, duration: 750 }} />
       )}
-      <Select onValueChange={(e) => setLang(e)} defaultValue={lang}>
+      <Select
+        onValueChange={(
+          e: "c" | "c++" | "python" | "java" | "javascript" | "go",
+        ) => setLang(e)}
+        defaultValue={lang}
+      >
         <SelectTrigger className="w-[180px] bg-white">
           <SelectValue placeholder="Theme" />
         </SelectTrigger>

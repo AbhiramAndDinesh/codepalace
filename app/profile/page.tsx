@@ -8,11 +8,25 @@ import CodeforcesUsernameForm from "@/components/profile/cfusername-form";
 import LeetcodeUsernameForm from "@/components/profile/lcusername-form";
 import { getLeaderboardProfile } from "@/actions/user";
 import UserForm from "@/components/profile/newuserform";
-
+interface Usertype {
+  username: string;
+  user_id: string;
+  codechefusername: string | null;
+  codeforcesusername: string | null;
+  leetcodeusername: string | null;
+  codechefRating: number | null;
+  codechefProblemsSolved: number | null;
+  codechefContestsAttended: number | null;
+  leetcodeRating: number | null;
+  leetcodeProblemsSolved: number | null;
+  leetcodeContestsAttended: number | null;
+  codeforcesRating: number | null;
+  codeforcesContestsAttended: number | null;
+}
 export default function Page() {
   const { email, id } = useUser();
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<Usertype | null>(null);
   useEffect(() => {
     // console.log("This came from the useUser: ", id, email);
     async function fetchProfile() {

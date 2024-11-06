@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { createCollection } from "@/actions/collection";
-import { Label } from "../ui/label";
 
 const CreateCollection = ({ user_id }: { user_id: string }) => {
   const [name, setName] = useState("");

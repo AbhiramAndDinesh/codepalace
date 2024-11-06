@@ -10,11 +10,19 @@ import { auth, signIn } from "@/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getSubmissions } from "@/actions/code";
 
+interface Submissionstype {
+  submission_id: string;
+  code: string;
+  accepted: boolean;
+  failed_cases: number;
+  time: string;
+  memory: string;
+}
 const ProblemPage = async ({ params }: { params: { slug: string } }) => {
   const problem = await getQuestionBySlug((await params).slug);
   const session = await auth();
   let solved = false;
-  let submissions: any[] = [];
+  let submissions: Submissionstype[] | undefined = [];
   if (session?.user && problem) {
     solved = await userSolved({
       user_id: session.user.id!,

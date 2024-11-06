@@ -55,7 +55,7 @@ export const executeSubmit = async ({
     for (let i = 0; i < submissions.length; i++) {
       const response = await axios.request({
         method: "POST",
-        url: "http://43.204.98.127:2358/submissions",
+        url: process.env.JUDGE0,
         params: {
           base64_encoded: "false",
           wait: "true",
@@ -134,7 +134,7 @@ export const executeRun = async ({
   const language_id = languageId[language];
   const response = await axios.request({
     method: "POST",
-    url: "http://43.204.98.127:2358/submissions",
+    url: process.env.JUDGE0,
     params: {
       base64_encoded: "false",
       wait: "true",
@@ -152,31 +152,28 @@ export const executeRun = async ({
   return response.data.stdout;
 };
 
-
-
-export const getSubmissions = async(problem_id:number,user_id:string)=>{
-  try{
-      const submissions = await prisma.submission.findMany({
-          where:{
-              problem_id:problem_id,
-              user_id:user_id
-          },
-          select:{
-              submission_id:true,
-              code:true,
-              accepted:true,
-              failed_cases:true,
-              time:true,
-              memory:true
-          },
-          orderBy:{
-              submittedAt:"desc"
-          }
-      })
-      // console.log(submissions);
-      return submissions;
+export const getSubmissions = async (problem_id: number, user_id: string) => {
+  try {
+    const submissions = await prisma.submission.findMany({
+      where: {
+        problem_id: problem_id,
+        user_id: user_id,
+      },
+      select: {
+        submission_id: true,
+        code: true,
+        accepted: true,
+        failed_cases: true,
+        time: true,
+        memory: true,
+      },
+      orderBy: {
+        submittedAt: "desc",
+      },
+    });
+    // console.log(submissions);
+    return submissions;
+  } catch (error) {
+    console.log("error in /actions/submissions.ts > getSubmission", error);
   }
-  catch(error){
-      console.log("error in /actions/submissions.ts > getSubmission",error);
-  }
-}
+};

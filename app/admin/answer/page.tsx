@@ -34,7 +34,7 @@ export default function AnswerForm() {
     console.log(values);
     try {
       const problem_id = await existingAnswer(values.problemid);
-      if (problem_id.status===500) {
+      if (problem_id?.status === 500) {
         toast.error("Problem ID does not exist");
         return;
       }

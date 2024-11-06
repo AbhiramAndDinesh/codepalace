@@ -89,15 +89,18 @@ export const unsaveCollection = async (
 export const createCollection = async ({
   user_id,
   name,
+  slug,
 }: {
   user_id: string;
   name: string;
+  slug: string;
 }) => {
   try {
     await prisma.collection.create({
       data: {
         owner_id: user_id,
         name,
+        slug,
       },
     });
   } catch (error) {

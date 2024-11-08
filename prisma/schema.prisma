@@ -259,3 +259,10 @@ model Document {
   value       String
   lesson      Lesson @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
 }
+
+model Enrolled {
+  course_id String
+  user_id   String
+
+  @@id([course_id, user_id])
+}

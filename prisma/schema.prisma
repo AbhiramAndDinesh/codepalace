@@ -70,20 +70,26 @@ model JSolvedUsers {
 }
 
 model Problem {
-  problem_id   Int                  @id @default(autoincrement())
-  title        String               @unique
-  slug         String               @unique
-  statement    String
-  difficulty   String
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
-  points       Int
+  problem_id Int     @id @unique
+  title      String  @unique
+  slug       String  @unique
+  statement  String
+  difficulty String
+  points     Int
+  language   String  @default("any")
+  inCourse   Boolean @default(false)
+  lesson_id  String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   Answers      Answers?
   users_solved JSolvedUsers[]
   tags         JunctionTags[]
   submissions  Submission[]
   testcases    Testcase[]
   collections  JCollectionProblem[]
+  lesson       Lesson?              @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
 }
 
 model Testcase {
@@ -161,10 +167,10 @@ model Leaderboard {
 }
 
 model Answers {
-  id        String  @id @default(cuid())
-  problemid Int     @unique
-  answer    String
-  problem   Problem @relation(fields: [problemid], references: [problem_id], onDelete: Cascade)
+  id         String  @id @default(cuid())
+  problem_id Int     @unique
+  answer     String
+  problem    Problem @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
 }
 
 model Collection {
@@ -195,4 +201,61 @@ model JCollectionProblem {
   collection    Collection @relation(fields: [collection_id], references: [collection_id], onDelete: Cascade)
 
   @@id([collection_id, problem_id])
+}
+
+model Course {
+  course_id String   @id @default(cuid())
+  name      String
+  image     String?
+  modules   Module[]
+}
+
+model Module {
+  module_id String   @id @default(cuid())
+  course_id String
+  name      String
+  course    Course   @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  lessons   Lesson[]
+}
+
+model Lesson {
+  lesson_id String    @id @default(cuid())
+  module_id String
+  name      String
+  type      String
+  video     Video?
+  document  Document?
+  problem   Problem?
+  priority  Int
+  module    Module    @relation(fields: [module_id], references: [module_id], onDelete: Cascade)
+}
+
+model LessonCompletion {
+  user_id   String
+  lesson_id String
+  module_id String
+
+  @@id([user_id, lesson_id, module_id])
+}
+
+model ModuleCompletion {
+  user_id   String
+  module_id String
+  course_id String
+
+  @@id([user_id, module_id, course_id])
+}
+
+model Video {
+  lesson_id String @unique
+  video_id  String @id @default(cuid())
+  url       String
+  lesson    Lesson @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+}
+
+model Document {
+  lesson_id   String @unique
+  document_id String @id @default(cuid())
+  value       String
+  lesson      Lesson @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
 }

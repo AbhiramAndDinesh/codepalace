@@ -37,6 +37,26 @@ export const getQuestionBySlug = async (slug: string) => {
   }
 };
 
+export const getQuestionById = async (problem_id: number) => {
+  try {
+    const question = await prisma.problem.findUnique({
+      where: {
+        problem_id,
+      },
+      include: {
+        Answers: {
+          select: {
+            answer: true,
+          },
+        },
+      },
+    });
+    return question;
+  } catch (error) {
+    console.log("Error action/admin/question.ts > getQuestionBySlug", error);
+  }
+};
+
 export const userSolved = async ({
   user_id,
   problem_id,

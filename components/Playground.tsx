@@ -23,9 +23,11 @@ import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 const Playground = ({
   language,
   problem_id,
+  restrict = false,
 }: {
   language: string;
   problem_id: number;
+  restrict?: boolean;
 }) => {
   const [code, setCode] = useState("");
   const [effectChain, setEffectChain] = useState(0);
@@ -114,21 +116,25 @@ const Playground = ({
       {successfullsolved && (
         <Fireworks className="" autorun={{ speed: 7, duration: 750 }} />
       )}
-      <Select
-        onValueChange={(
-          e: "c" | "c++" | "python" | "java" | "javascript" | "go",
-        ) => setLang(e)}
-        defaultValue={lang}
-      >
-        <SelectTrigger className="w-[180px] bg-white">
-          <SelectValue placeholder="Theme" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="javascript">Javascript</SelectItem>
-          <SelectItem value="python">Python</SelectItem>
-          <SelectItem value="java">Java</SelectItem>
-        </SelectContent>
-      </Select>
+      {!restrict ? (
+        <Select
+          onValueChange={(
+            e: "c" | "c++" | "python" | "java" | "javascript" | "go",
+          ) => setLang(e)}
+          defaultValue={lang}
+        >
+          <SelectTrigger className="w-[180px] bg-white">
+            <SelectValue placeholder="Theme" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="javascript">Javascript</SelectItem>
+            <SelectItem value="python">Python</SelectItem>
+            <SelectItem value="java">Java</SelectItem>
+          </SelectContent>
+        </Select>
+      ) : (
+        <p>{lang}</p>
+      )}
 
       <ResizablePanelGroup direction="vertical">
         <ResizablePanel defaultSize={60} className="relative">

@@ -3,7 +3,7 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { UserProvider } from "@/context/userContext";
-import { Space_Grotesk } from "next/font/google";
+import { Space_Grotesk, Gabarito } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,6 +16,12 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-spaceGrotesk",
 });
 
+const gabarito = Gabarito({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-gabarito",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +31,9 @@ export default function RootLayout({
     <SessionProvider>
       <UserProvider>
         <html lang="en">
-          <body className={`bg-[#1A1919] ${spaceGrotesk.variable}`}>
+          <body
+            className={`bg-[#1A1919] ${spaceGrotesk.variable} ${gabarito.variable}`}
+          >
             <div className="min-h-[100vh] max-w-screen-md mx-auto">
               {children}
             </div>

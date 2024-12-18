@@ -58,6 +58,7 @@ const config: Config = {
       },
       fontFamily: {
         spaceGrotesk: ["var(--font-spaceGrotesk)"],
+        gabarito: ["var(--font-gabarito)"],
       },
     },
   },

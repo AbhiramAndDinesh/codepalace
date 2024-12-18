@@ -1,12 +1,11 @@
 // src/components/multi-select.tsx
 
 import * as React from "react";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, MoreVertical } from "lucide-react";
 import { useUser } from "@/context/userContext";
 import { addProblemToCollection } from "@/actions/collection";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -117,7 +116,7 @@ export const MultiSelect = React.forwardRef<
       modal={modalPopover}
     >
       <PopoverTrigger asChild>
-        <Button className="p-2 bg-black text-2xl">+</Button>
+        <MoreVertical className="cursor-pointer text-white h-4" />
       </PopoverTrigger>
       <PopoverContent
         className="w-auto p-0"

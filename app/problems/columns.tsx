@@ -15,17 +15,13 @@ export type Problem = {
 
 export const columns: ColumnDef<Problem>[] = [
   {
-    accessorKey: "problem_id",
-    header: "#",
-  },
-  {
     accessorKey: "title",
-    header: "Name",
+    header: () => <div className="md:w-[300px]">Problem</div>,
     cell: ({ row }) => {
       return (
         <Link
           href={`/problems/${row.original.slug}`}
-          className="hover:text-blue-400"
+          className="hover:text-blue-400 text-gray-300 pl-5"
         >
           {row.original.title}
         </Link>
@@ -34,28 +30,30 @@ export const columns: ColumnDef<Problem>[] = [
   },
   {
     accessorKey: "difficulty",
-    header: "Difficulty",
+    header: () => <div className="text-center">Difficulty</div>,
     cell: ({ row }) => {
       const value = row.original.difficulty;
-      let background = "bg-green-400/80";
-      if (value === "Medium") background = "bg-orange-400";
-      if (value === "Hard") background = "bg-red-400";
+      let background = "text-green-400";
+      if (value === "Medium") background = "text-orange-400";
+      if (value === "Hard") background = "text-red-400";
       return (
         <div className={`${background} px-2 py-1 text-sm rounded-sm inline`}>
-          {value}
+          <p className="text-right">{value}</p>
         </div>
       );
     },
   },
   {
-    header: "fn",
+    id: "actions",
     cell: ({ row }) => {
       return (
-        <MultiSelect
-          onValueChange={() => {}}
-          problem_id={row.original.problem_id}
-          placeholder="Select frameworks"
-        />
+        <div className="flex justify-end pr-4">
+          <MultiSelect
+            onValueChange={() => {}}
+            problem_id={row.original.problem_id}
+            placeholder="Select frameworks"
+          />
+        </div>
       );
     },
   },

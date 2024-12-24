@@ -1,8 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
 import { Progress } from "@/components/ui/progress";
-import { DotPattern } from "@/components/ui/dot-pattern";
-import { cn } from "@/lib/utils";
 import SparklesText from "@/components/ui/sparkles-text";
 
 const Module = ({ name, progress }: { name: string; progress: number }) => {
@@ -21,15 +19,10 @@ const ModulesPage = () => {
   const name = params.name;
   return (
     <div className="pt-10">
-      <DotPattern
-        className={cn(
-          "[mask-image:linear-gradient(to_bottom,gray,transparent,transparent)]",
-        )}
-      />
       <SparklesText
         sparklesCount={3}
         text={`${name}`}
-        className="text-3xl font-spaceGrotesk font-semibold mb-1 text-[#EDEDED]"
+        className="text-3xl font-spaceGrotesk font-semibold mb-1 text-[#EDEDED] capitalize"
       />
       ;
       <p className="text-[#B7B7B7] text-lg font-gabarito mb-10">

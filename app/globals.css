@@ -71,6 +71,6 @@ body {
     }
 
     .course {
-        @apply h-[150px] aspect-square border border-red-700 rounded-md p-10 flex grow justify-center items-center transition-all hover:bg-red-800/25 hover:scale-95 text-red-600 hover:text-red-600 font-spaceGrotesk;
+        @apply h-[150px] aspect-square bg-red-500 rounded-md p-10 flex grow justify-center items-center transition-all hover:bg-red-500/80 hover:scale-105 text-background font-spaceGrotesk font-semibold;
     }
 }

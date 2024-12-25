@@ -24,33 +24,33 @@ const HoverCard = ({
   des: string;
 }) => {
   return (
-    <div className="relative aspect-square sm:rounded-md rounded-2xl mb-5">
+    <div className="relative sm:aspect-square aspect-[1/.75] sm:rounded-md rounded-2xl mb-5">
       <Link
         href={href}
-        className="group min-w-full transition-all hover:text-red-500 text-background font-medium font-spaceGrotesk bg-red-500 min-h-full grow hover:bg-background hover:translate-x-3 hover:translate-y-[-12px] border sm:rounded-md rounded-xl border-red-500 p-3 duration-400 block"
+        className="group min-w-full transition-all hover:text-red-500 text-background font-medium font-spaceGrotesk bg-red-500 min-h-full grow hover:bg-background hover:translate-x-3 hover:translate-y-[-12px] border sm:rounded-md rounded-xl border-red-500 p-3 max-sm:p-6 duration-400 block"
       >
-        <div className="flex gap-2 items-center text-lg font-semibold">
+        <div className="flex gap-2 items-center text-lg max-sm:text-2xl font-semibold">
           <p>{heading}</p>
           {heading === "Leaderboard" && (
             <ChartNoAxesCombined
               size={20}
-              className="bg-red-500 rounded-sm text-background p-0.5"
+              className="bg-red-500 rounded-sm text-background max-sm:w-[30px] max-sm:h-[30px] p-0.5"
             />
           )}
           {heading === "Collections" && (
             <SquareLibrary
               size={20}
-              className="bg-red-500 rounded-sm text-background p-0.5"
+              className="bg-red-500 rounded-sm text-background p-0.5 max-sm:w-[30px] max-sm:h-[30px]"
             />
           )}
           {heading === "Courses" && (
             <Shapes
               size={20}
-              className="bg-red-500 rounded-sm text-background p-0.5"
+              className="bg-red-500 rounded-sm text-background p-0.5 max-sm:w-[30px] max-sm:h-[30px]"
             />
           )}
         </div>
-        <p className="font-gabarito mt-5 text-background transition-all duration-400 group-hover:text-gray-400">
+        <p className="font-gabarito mt-5 max-sm:text-xl text-background transition-all duration-400 group-hover:text-gray-400">
           {des}
         </p>
       </Link>
@@ -73,33 +73,33 @@ const HoverCardReverse = ({
   des: string;
 }) => {
   return (
-    <div className="relative aspect-square sm:rounded-md rounded-2xl mb-5">
+    <div className="relative sm:aspect-square aspect-[1/.75] sm:rounded-md rounded-2xl mb-5">
       <Link
         href={href}
-        className="group min-w-full transition-all hover:text-red-500 text-background font-medium font-spaceGrotesk bg-gray-400 min-h-full grow hover:bg-background hover:translate-x-3 hover:translate-y-[-12px] border sm:rounded-md border-gray-400 hover:border-red-500 rounded-xl p-3 duration-400 block"
+        className="group min-w-full transition-all hover:text-red-500 text-background font-medium font-spaceGrotesk bg-gray-400 min-h-full grow hover:bg-background hover:translate-x-3 hover:translate-y-[-12px] border sm:rounded-md border-gray-400 hover:border-red-500 rounded-xl p-3 max-sm:p-6 duration-400 block"
       >
-        <div className="flex gap-2 items-center text-lg font-semibold">
+        <div className="flex gap-2 items-center text-lg max-sm:text-2xl font-semibold">
           <p>{heading}</p>
           {heading === "Leaderboard" && (
             <ChartNoAxesCombined
               size={20}
-              className="group-hover:bg-red-500 duration-400 transition-colors rounded-sm text-background p-0.5"
+              className="group-hover:bg-red-500 duration-400 transition-colors rounded-sm text-background p-0.5 max-sm:w-[30px] max-sm:h-[30px]"
             />
           )}
           {heading === "Collections" && (
             <SquareLibrary
               size={20}
-              className="group-hover:bg-red-500 duration-400 transition-colors rounded-sm text-background p-0.5"
+              className="group-hover:bg-red-500 duration-400 transition-colors rounded-sm text-background p-0.5 max-sm:w-[30px] max-sm:h-[30px]"
             />
           )}
           {heading === "Courses" && (
             <Shapes
               size={20}
-              className="group-hover:bg-red-500 duration-400 transition-colors rounded-sm text-background p-0.5"
+              className="group-hover:bg-red-500 duration-400 transition-colors rounded-sm text-background p-0.5 max-sm:w-[30px] max-sm:h-[30px]"
             />
           )}
         </div>
-        <p className="font-gabarito mt-5 text-background transition-all duration-400 group-hover:text-gray-400">
+        <p className="font-gabarito max-sm:text-xl mt-5 text-background transition-all duration-400 group-hover:text-gray-400">
           {des}
         </p>
       </Link>

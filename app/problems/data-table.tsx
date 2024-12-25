@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center text-red-700 text-lg font-spaceGrotesk bg-red-800/25 border border-red-700"
+                  className="h-24 text-center text-red-700 text-lg font-spaceGrotesk border border-red-700"
                 >
                   No results.
                 </TableCell>

@@ -1,6 +1,7 @@
 "use client";
 import {
   deleteCollection,
+  makePublic,
   saveCollection,
   unsaveCollection,
 } from "@/actions/collection";
@@ -21,6 +22,16 @@ const CollectionButton = ({
   const router = useRouter();
   const handleDelete = async () => {
     deleteCollection({ user_id, collection_id });
+  };
+  const handlePublic = async () => {
+    const res = await makePublic({ user_id, collection_id });
+    if (!res) {
+      toast.error("Failed to make the Collection Public");
+    }
+    if (res?.status === 200) {
+      toast.success("Collection has been set to Public");
+      router.refresh();
+    }
   };
   const handleUnsave = async () => {
     const res = await unsaveCollection(user_id, collection_id);
@@ -52,6 +63,15 @@ const CollectionButton = ({
           }}
         >
           Delete
+        </Button>
+      )}
+      {owner && (
+        <Button
+          onClick={() => {
+            handlePublic();
+          }}
+        >
+          Make Public
         </Button>
       )}
       {!owner && saved && <Button onClick={handleUnsave}>Unsave</Button>}

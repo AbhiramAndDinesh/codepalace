@@ -120,7 +120,7 @@ export const makePublic = async ({
   try {
     const check = await isOwner(user_id, collection_id);
     if (!check) {
-      return;
+      return { status: 401, success: false };
     }
     await prisma.collection.update({
       where: {
@@ -130,6 +130,7 @@ export const makePublic = async ({
         isPublic: true,
       },
     });
+    return { status: 200, sucess: true };
   } catch (error) {
     console.log("Error in actions/collection.ts > makePublic", error);
   }

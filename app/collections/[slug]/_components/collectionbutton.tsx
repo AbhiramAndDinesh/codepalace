@@ -28,12 +28,19 @@ const CollectionButton = ({
       toast.error("Failed to Unsave COllection");
     }
     if (res?.status == 200) {
-      toast.success("Successfully unsaved COllection");
+      toast.success("Successfully unsaved Collection");
       router.refresh();
     }
   };
   const handleSave = async () => {
-    saveCollection(user_id, collection_id);
+    const res = await saveCollection(user_id, collection_id);
+    if (!res) {
+      toast.error("Failed to Save Collection");
+    }
+    if (res?.status == 200) {
+      toast.success("Successfully unsaved Collection");
+      router.refresh();
+    }
   };
   return (
     <div>

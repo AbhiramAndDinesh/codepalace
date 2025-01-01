@@ -42,7 +42,7 @@ const QuestionsPage = async () => {
             <div key={index} className="relative">
               <div className="hover:cursor-pointer border bg-[#1A1919] border-red-700 border-dashed text-gray-300 hover:translate-x-1 hover:-translate-y-1 transition-all duration-100 rounded-md p-3 w-full flex justify-center items-center">
                 <p className="font-spaceGrotesk text-sm text-red-600">
-                  collection {index}
+                  collection {index}fsjkdlfaksd
                 </p>
               </div>
               <div className="absolute h-full rounded-md z-[-1] border border-red-700 border-dashed bg-red-700 w-full top-0 left-0"></div>

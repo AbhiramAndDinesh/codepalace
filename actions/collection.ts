@@ -16,7 +16,7 @@ export const isOwner = async (user_id: string, collection_id: string) => {
   } catch (error) {
     console.log(
       "Error in finding the owner of collection actions>collection.ts",
-      error,
+      error
     );
     return false;
   }
@@ -24,7 +24,7 @@ export const isOwner = async (user_id: string, collection_id: string) => {
 
 export const saveCollection = async (
   user_id: string,
-  collection_id: string,
+  collection_id: string
 ) => {
   try {
     const owner = await isOwner(user_id, collection_id);
@@ -47,14 +47,15 @@ export const saveCollection = async (
         },
       },
     });
+    return { success: true, status: 200 };
   } catch (error) {
-    console.log("Error in savecollectio actions>collection.ts", error);
+    console.log("Error in savecollection actions>collection.ts", error);
   }
 };
 
 export const unsaveCollection = async (
   user_id: string,
-  collection_id: string,
+  collection_id: string
 ) => {
   try {
     const owner = await isOwner(user_id, collection_id);
@@ -81,7 +82,7 @@ export const unsaveCollection = async (
   } catch (error) {
     console.log(
       "Error in unsaving the collection actions>collection.ts>unsaveCollection",
-      error,
+      error
     );
   }
 };
@@ -103,6 +104,7 @@ export const createCollection = async ({
         slug,
       },
     });
+    return { status: 200, sucess: true };
   } catch (error) {
     console.log("Error in actions/collection.ts > createCollection", error);
   }
@@ -178,7 +180,7 @@ export const getUserPrivateCollections = async ({
   } catch (error) {
     console.log(
       "Error in actions/collection.ts > getUserSavedCollections",
-      error,
+      error
     );
   }
 };
@@ -202,7 +204,7 @@ export const getUserPrivateCollections2 = async ({
   } catch (error) {
     console.log(
       "Error in actions/collection.ts > getUserSavedCollections",
-      error,
+      error
     );
   }
 };
@@ -229,7 +231,7 @@ export const getUserSavedCollections = async ({
   } catch (error) {
     console.log(
       "Error in actions/collection.ts > getUserPrivateCollections",
-      error,
+      error
     );
   }
 };
@@ -281,14 +283,14 @@ export const getCollectionbySlug = async (slug: string) => {
   } catch (error) {
     console.log(
       "Error in finding collectiond actions>collection>getCollectionbySlug",
-      error,
+      error
     );
   }
 };
 
 export const isSavedCollection = async (
   user_id: string,
-  collection_id: string,
+  collection_id: string
 ) => {
   try {
     const res = await prisma.jUserCollection.findMany({
@@ -303,14 +305,14 @@ export const isSavedCollection = async (
   } catch (error) {
     console.log(
       "Error in finding issavedCollection actions>collection>isSavedCollection",
-      error,
+      error
     );
   }
 };
 
 export const addProblemToCollection = async (
   values: string[],
-  problem_id: number,
+  problem_id: number
 ) => {
   if (values.length > 0) {
     values.map(async (value) => {
@@ -324,7 +326,7 @@ export const addProblemToCollection = async (
       } catch (error) {
         console.log(
           "Error in created jcollectionsproblem actions>collection>jcollectionproblem",
-          error,
+          error
         );
       }
     });
@@ -333,7 +335,7 @@ export const addProblemToCollection = async (
 
 export const deleteProblemFromCollection = async (
   collection_id: string,
-  problem_id: number,
+  problem_id: number
 ) => {
   try {
     await prisma.jCollectionProblem.deleteMany({
@@ -345,7 +347,7 @@ export const deleteProblemFromCollection = async (
   } catch (error) {
     console.log(
       "Error in actions/collection.ts > deleteProblemFromCollection",
-      error,
+      error
     );
   }
 };
@@ -371,7 +373,7 @@ export const getCollectionQuestions = async (collection_id: string) => {
   } catch (error) {
     console.log(
       "Error in actions/collection.ts > getCollectionQuetions",
-      error,
+      error
     );
   }
 };

@@ -13,14 +13,19 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { createCollection } from "@/actions/collection";
-
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 const CreateCollection = ({ user_id }: { user_id: string }) => {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-
+  const router = useRouter();
   const onCreate = async () => {
     console.log({ name, user_id });
-    await createCollection({ name, user_id, slug });
+    const res = await createCollection({ name, user_id, slug });
+    if (res?.status === 200) {
+      toast.success("Collection Created Successfully");
+      router.refresh();
+    }
   };
   return (
     <Dialog>

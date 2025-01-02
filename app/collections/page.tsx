@@ -1,10 +1,9 @@
 import { auth } from "@/auth";
-import Link from "next/link";
 import {
   getUserPrivateCollections,
   getUserSavedCollections,
 } from "@/actions/collection";
-import CreateCollectionModel from "@/components/collections/CreateCollectionModel";
+
 import ShowCollections from "@/components/collections/ShowCollections";
 
 interface Collection {
@@ -30,24 +29,13 @@ const CollectionsPage = async () => {
   }
 
   if (!session || !session.user) return <div>No user is logged in</div>;
-  const arraylength = privateCollections?.length || 0;
   return (
     <div>
-      <CreateCollectionModel user_id={session.user.id!} />
-      <div>
-        <ShowCollections
-          privateCollections={privateCollections || []}
-          publicCollections={publicCollections || []}
-        />
-        {/* <h1 className="text-3xl">Public Collections</h1>
-        {publicCollections?.map((collection, index) => {
-          return (
-            <Link key={index} href={`/collections/${collection.slug}`}>
-              {collection.name}
-            </Link>
-          );
-        })} */}
-      </div>
+      <ShowCollections
+        privateCollections={privateCollections || []}
+        publicCollections={publicCollections || []}
+        user_id={session.user.id || ""}
+      />
     </div>
   );
 };

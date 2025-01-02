@@ -6,11 +6,12 @@ import {
   BookMarked,
   ChevronLeft,
   ChevronRight,
-  Plus,
   SquareLibrary,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import CreateCollectionModel from "./CreateCollectionModel";
+import GridPattern from "../ui/grid-pattern";
 interface Collection {
   collection_id: string;
   name: string;
@@ -22,41 +23,16 @@ interface Collection {
 interface ShowCollectionsProps {
   privateCollections: Collection[];
   publicCollections: Collection[];
+  user_id: string;
 }
 
 const ShowCollections = ({
   privateCollections,
   publicCollections,
+  user_id,
 }: ShowCollectionsProps) => {
   const [privatestartIndex, setprivateStartIndex] = useState(0);
   const [publicstartIndex, setpublicStartIndex] = useState(0);
-
-  //   const privateCollections = [
-  //     {
-  //       name: "Hello",
-  //       slug: "hello",
-  //     },
-  //     {
-  //       name: "Hello World",
-  //       slug: "hello-world",
-  //     },
-  //     {
-  //       name: "Hello World 1",
-  //       slug: "hello-world-1",
-  //     },
-  //     {
-  //       name: "Hello2",
-  //       slug: "hello2",
-  //     },
-  //     {
-  //       name: "Hello World2",
-  //       slug: "hello-world2",
-  //     },
-  //     {
-  //       name: "Hello World 2",
-  //       slug: "hello-world-2",
-  //     },
-  //   ];
   const privatearraylength = privateCollections.length;
   const publicarraylength = publicCollections.length;
   const nextClick = (x: string) => {
@@ -86,6 +62,15 @@ const ShowCollections = ({
   };
   return (
     <div className="p-5">
+      <GridPattern
+        width={40}
+        height={40}
+        x={-1}
+        y={-1}
+        className={cn(
+          "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] -z-20 h-[300px]"
+        )}
+      />
       <div className="w-full flex flex-col sm:mt-20 mt-12  gap-4">
         <div className="flex items-center gap-2 font-bold">
           <h2 className=" text-3xl font-spaceGrotesk text-red-500 ">
@@ -93,7 +78,7 @@ const ShowCollections = ({
           </h2>
           <SquareLibrary
             size={20}
-            className="bg-red-500 rounded-sm text-background p-0.5 sm:w-[25px]  sm:h-[25px]"
+            className="bg-red-500 rounded-sm  p-0.5 sm:w-[25px]  sm:h-[25px]"
           />
         </div>
         <div className="flex flex-col gap-3 max-sm:gap-4">
@@ -102,14 +87,8 @@ const ShowCollections = ({
               <h2 className="text-2xl text-gray-300">Private</h2>
               <BookLock size={20} color="#d1d5db" />
             </div>
-            <Button
-              variant={"red"}
-              className="text-sm px-2 py-1 h-8 flex gap-0"
-              // className=" text-sm border border-red-500/80 bg-red-500/20 text-red-500 hover:bg-red-500/20"
-            >
-              New
-              <Plus size={20} />
-            </Button>
+            <CreateCollectionModel user_id={user_id} />
+            
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3  max-mobile:flex max-mobile:flex-col max-mobile:gap-4 max-mobile:justify-center max-sm:pr-1  gap-4 ">

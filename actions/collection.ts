@@ -106,7 +106,8 @@ export const createCollection = async ({
     });
     return { status: 200, sucess: true };
   } catch (error) {
-    console.log("Error in actions/collection.ts > createCollection", error);
+    console.log("Error in actions/collection.ts > createCollection");
+    return { status: 400, success: false };
   }
 };
 

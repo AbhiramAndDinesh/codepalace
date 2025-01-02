@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import GridPattern from "@/components/ui/grid-pattern";
+import { toast } from "sonner";
 const Collections = () => {
   const [startIndex, setStartIndex] = useState(0);
   const privateCollections = [
@@ -54,10 +56,19 @@ const Collections = () => {
     }
   };
   return (
-    <div className="p-5">
+    <div className="p-5 overflow-hidden">
       <div className="w-full flex flex-col sm:mt-20 mt-12  gap-4">
+        <GridPattern
+          width={40}
+          height={40}
+          x={-1}
+          y={-1}
+          className={cn(
+            "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] -z-20 h-[300px]"
+          )}
+        />
         <div className="flex items-center gap-2 font-bold">
-          <h2 className=" text-3xl font-spaceGrotesk text-red-500 ">
+          <h2 className=" text-3xl font-spaceGrotesk text-red-500  ">
             Collections
           </h2>
           <SquareLibrary
@@ -118,7 +129,7 @@ const Collections = () => {
             </Button>
           </div>
         </div>
-        {/* <div className="flex flex-col gap-3 max-sm:gap-4">
+        <div className="flex flex-col gap-3 max-sm:gap-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-1 font-spaceGrotesk font-semibold">
               <h2 className="text-2xl text-gray-300">Saved</h2>
@@ -126,18 +137,20 @@ const Collections = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3  max-mobile:flex max-mobile:flex-col max-mobile:gap-4 max-mobile:justify-center max-sm:pr-1  gap-4 ">
-            {privateCollections.slice(startIndex, startIndex + 3).map((values, index) => (
-              <Link href={`collections/${values.slug}`} key={index}>
-                <div className="relative bg-red-500 rounded">
-                  <div
-                    className="inset-0 bg-background transition-all text-gray-300 p-3 z-10 max-sm:translate-x-1 max-sm:-translate-y-1
+            {privateCollections
+              .slice(startIndex, startIndex + 3)
+              .map((values, index) => (
+                <Link href={`collections/${values.slug}`} key={index}>
+                  <div className="relative bg-red-500 rounded">
+                    <div
+                      className="inset-0 bg-background transition-all text-gray-300 p-3 z-10 max-sm:translate-x-1 max-sm:-translate-y-1
               hover:cursor-pointer sm:hover:translate-x-1 sm:hover:-translate-y-1 truncate rounded-[4px] border sm:border-gray-500/80 border-red-500  sm:hover:border-red-500 flex justify-center  items-center"
-                  >
-                    <p className="truncate">{values.name}</p>
+                    >
+                      <p className="truncate">{values.name}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
           </div>
           <div className="flex items-center justify-end gap-1">
             <Button
@@ -157,7 +170,7 @@ const Collections = () => {
               <ChevronRight size={100} />
             </Button>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

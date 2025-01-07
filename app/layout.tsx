@@ -34,9 +34,7 @@ export default function RootLayout({
           <body
             className={`bg-[#1A1919] ${spaceGrotesk.variable} ${gabarito.variable}`}
           >
-            <div className="min-h-[100vh] max-w-screen-md mx-auto">
-              {children}
-            </div>
+            <div className="min-h-[100vh] mx-auto">{children}</div>
             <Toaster />
           </body>
         </html>

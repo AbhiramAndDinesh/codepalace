@@ -116,7 +116,7 @@ export default function Home() {
   // const { data: session } = useSession();
   // const userId = session?.user;
   return (
-    <div className="p-5">
+    <div className="p-5 max-w-screen-md m-auto">
       <GridPattern
         width={50}
         height={50}

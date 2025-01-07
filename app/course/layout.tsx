@@ -9,7 +9,7 @@ const CourseLayout = ({ children }: { children: React.ReactNode }) => {
           "[mask-image:linear-gradient(to_bottom,gray,transparent,transparent)]",
         )}
       />
-      {children}
+      <div className="max-w-screen-md m-auto">{children}</div>
     </div>
   );
 };

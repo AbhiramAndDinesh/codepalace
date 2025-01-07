@@ -17,13 +17,7 @@ const QuestionsPage = async () => {
     return <h1>Loading</h1>;
   }
   return (
-    <div className="p-10">
-      {/* <div className="flex gap-2 italic text-sm text-[#909399] items-center">
-        <Link href={"/"}>home</Link>
-        <ChevronRight size={14} />
-        <p>problems</p>
-      </div> */}
-
+    <div className="p-10 absolute left-0 right-0 max-w-screen-md m-auto">
       <div className="w-full flex gap-5 py-5">
         <div className="course">
           <p>Learn Java</p>

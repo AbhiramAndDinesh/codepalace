@@ -45,7 +45,7 @@ const ProblemPage = async ({
   const answer = problem.Answers == null ? "No answer" : problem.Answers.answer;
   return (
     <div className="min-h-screen">
-      <form
+      {/* <form
         action={async () => {
           "use server";
           await signIn();
@@ -57,53 +57,57 @@ const ProblemPage = async ({
         >
           Sign in
         </button>
-      </form>
-      {solved && <div className="bg-green-500">Solved</div>}
-      <Tabs defaultValue="question" className="w-full h-[87vh]">
-        <TabsList>
-          <TabsTrigger value="question">Question</TabsTrigger>
-          <TabsTrigger value="submissions">Submissions</TabsTrigger>
-          <TabsTrigger value="answer">Answer</TabsTrigger>
-        </TabsList>
-        <TabsContent value="question" className="h-full">
-          <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={45} minSize={20}>
+      </form> */}
+      {/* {solved && <div className="bg-green-500">Solved</div>} */}
+
+      <ResizablePanelGroup direction="horizontal" className="h-[100vh]">
+        <ResizablePanel defaultSize={45} minSize={20}>
+          <Tabs defaultValue="question" className="w-full h-[100vh]">
+            <TabsList>
+              <TabsTrigger value="question">Question</TabsTrigger>
+              <TabsTrigger value="submissions">Submissions</TabsTrigger>
+              <TabsTrigger value="answer">Answer</TabsTrigger>
+            </TabsList>
+            <TabsContent value="question" className="h-full">
               <div className="w-full bg-blue-200 h-full">
                 <h1>
                   <code>{problem.title}</code>
                 </h1>
                 <div dangerouslySetInnerHTML={{ __html: problem.statement }} />
               </div>
-            </ResizablePanel>
-            <ResizableHandle
-              className="w-[5px] hover:bg-blue-500 bg-dark-layer-2"
-              withHandle
-            />
-            <ResizablePanel className="h-full" defaultSize={65} minSize={40}>
-              <div className="w-full h-full p-3 bg-red-400">
-                <Playground language="python" problem_id={problem.problem_id} />
+            </TabsContent>
+            <TabsContent value="submissions">
+              <div className="flex flex-col items-center">
+                {submissions.map((item) => {
+                  return (
+                    <div
+                      className="flex gap-4 text-black"
+                      key={item.submission_id}
+                    >
+                      <p>{item.accepted}</p>
+                      <p>{item.failed_cases}</p>
+                      <p>{item.time}</p>
+                      <p>{item.memory}</p>
+                    </div>
+                  );
+                })}
               </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </TabsContent>
-        <TabsContent value="submissions">
-          <div className="flex flex-col items-center">
-            {submissions.map((item) => {
-              return (
-                <div className="flex gap-4 text-black" key={item.submission_id}>
-                  <p>{item.accepted}</p>
-                  <p>{item.failed_cases}</p>
-                  <p>{item.time}</p>
-                  <p>{item.memory}</p>
-                </div>
-              );
-            })}
+            </TabsContent>
+            <TabsContent value="answer">
+              <p>{answer}</p>
+            </TabsContent>
+          </Tabs>
+        </ResizablePanel>
+        <ResizableHandle
+          className="w-[5px] hover:bg-blue-500 bg-dark-layer-2"
+          withHandle
+        />
+        <ResizablePanel className="h-[100vh]" defaultSize={65} minSize={40}>
+          <div className="w-full h-full p-3 bg-red-400">
+            <Playground language="python" problem_id={problem.problem_id} />
           </div>
-        </TabsContent>
-        <TabsContent value="answer">
-          <p>{answer}</p>
-        </TabsContent>
-      </Tabs>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };

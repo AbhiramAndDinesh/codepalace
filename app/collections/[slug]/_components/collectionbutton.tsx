@@ -54,9 +54,10 @@ const CollectionButton = ({
     }
   };
   return (
-    <div>
+    <div className="">
       {owner && (
         <Button
+          variant={"red"}
           onClick={() => {
             handleDelete();
             console.log("Deleted");
@@ -67,6 +68,7 @@ const CollectionButton = ({
       )}
       {owner && (
         <Button
+          variant={"red"}
           onClick={() => {
             handlePublic();
           }}
@@ -74,8 +76,16 @@ const CollectionButton = ({
           Make Public
         </Button>
       )}
-      {!owner && saved && <Button onClick={handleUnsave}>Unsave</Button>}
-      {!owner && !saved && <Button onClick={handleSave}>Save</Button>}
+      {!owner && saved && (
+        <Button variant={"red"} onClick={handleUnsave}>
+          Unsave
+        </Button>
+      )}
+      {!owner && !saved && (
+        <Button variant={"red"} onClick={handleSave}>
+          Save
+        </Button>
+      )}
     </div>
   );
 };

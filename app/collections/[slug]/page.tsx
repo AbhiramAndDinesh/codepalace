@@ -46,7 +46,7 @@ export default async function Page({
         collection_id={collectiondata.collection_id}
       />
       <p>Problems: TODO</p>
-      <div className="w-[1000px]">
+      <div className="max-w-screen-md">
         {owner ? (
           <DataTable columns={columns_owner} data={problems} />
         ) : (

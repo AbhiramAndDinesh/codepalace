@@ -22,6 +22,30 @@ export const isOwner = async (user_id: string, collection_id: string) => {
   }
 };
 
+export const isCollectionPublic = async (
+  user_id: string,
+  collection_id: string
+) => {
+  try {
+    const res = await prisma.collection.findUnique({
+      where: { collection_id: collection_id, owner_id: user_id },
+      select: {
+        isPublic: true,
+      },
+    });
+    if (res?.isPublic === true) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(
+      "error in finding the collection is public or not actions>collection.ts>isCollectionPublic",
+      error
+    );
+    return false;
+  }
+};
+
 export const saveCollection = async (
   user_id: string,
   collection_id: string
@@ -106,7 +130,7 @@ export const createCollection = async ({
     });
     return { status: 200, sucess: true };
   } catch (error) {
-    console.log("Error in actions/collection.ts > createCollection");
+    console.log("Error in actions/collection.ts > createCollection", error);
     return { status: 400, success: false };
   }
 };
@@ -162,6 +186,7 @@ export const makePrivate = async ({
         isPublic: false,
       },
     });
+    return { status: 200, sucess: true };
   } catch (error) {
     console.log("Error in actions/collection.ts > makePrivate", error);
   }
@@ -255,6 +280,7 @@ export const deleteCollection = async ({
         collection_id,
       },
     });
+    return { status: 200, success: true };
   } catch (error) {
     console.log("Error in actions/collection.ts > deleteCollection", error);
   }

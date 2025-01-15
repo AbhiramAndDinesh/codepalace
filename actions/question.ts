@@ -53,3 +53,22 @@ export const userSolved = async ({
     return false;
   }
 };
+
+export const userSolvedIds = async (user_id: string) => {
+  try {
+    const problem_ids = await prisma.jSolvedUsers.findMany({
+      where: {
+        user_id,
+      },
+      select: {
+        problem_id: true,
+      },
+    });
+    return problem_ids;
+  } catch (error) {
+    console.log(
+      "error in findind users solved problem_ids actions->question.ts>userSolvedIds",
+      error
+    );
+  }
+};

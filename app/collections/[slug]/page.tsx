@@ -10,6 +10,10 @@ import CollectionButton from "./_components/collectionbutton";
 import GridPattern from "@/components/ui/grid-pattern";
 import { cn } from "@/lib/utils";
 
+import { DataTable } from "./data-table";
+import { columns_owner } from "./columns-owner";
+import { columns } from "./columns";
+
 export default async function Page({
   params,
 }: {
@@ -20,6 +24,7 @@ export default async function Page({
     return <div>User not found sign in!!</div>;
   }
   const user_id = session.user?.id || "";
+
   const { slug } = await params;
   const collectiondata = await getCollectionbySlug(slug);
   if (!collectiondata) {
@@ -37,7 +42,10 @@ export default async function Page({
   if (!owner && !collectiondata.isPublic) {
     return <div>This is a private Collection</div>;
   }
-  const problems = await getCollectionQuestions(collectiondata.collection_id);
+  const problems = await getCollectionQuestions(
+    collectiondata.collection_id,
+    user_id
+  );
   // console.log(problems);
   if (!problems) return;
   return (
@@ -67,8 +75,12 @@ export default async function Page({
             />
           </div>
         </div>
-        <div className="flex flex-col gap-3 max-sm:gap-4">
-          
+        <div className="">
+          {owner ? (
+            <DataTable columns={columns_owner} data={problems} />
+          ) : (
+            <DataTable columns={columns} data={problems} />
+          )}
         </div>
       </div>
     </div>

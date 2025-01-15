@@ -1,5 +1,6 @@
 "use server";
 import { prisma } from "@/prisma";
+import { userSolvedIds } from "./question";
 
 export const isOwner = async (user_id: string, collection_id: string) => {
   try {
@@ -372,6 +373,7 @@ export const deleteProblemFromCollection = async (
         problem_id,
       },
     });
+    return { status: 200, success: true };
   } catch (error) {
     console.log(
       "Error in actions/collection.ts > deleteProblemFromCollection",
@@ -380,7 +382,7 @@ export const deleteProblemFromCollection = async (
   }
 };
 
-export const getCollectionQuestions = async (collection_id: string) => {
+export const getCollectionQuestions = async (collection_id: string,user_id:string) => {
   try {
     const question_ids = await prisma.jCollectionProblem.findMany({
       where: {
@@ -390,11 +392,17 @@ export const getCollectionQuestions = async (collection_id: string) => {
         problem: true,
       },
     });
+    const solved_ = await userSolvedIds(user_id);
+    const solved_ids= new Set<number>();
+    solved_?.map((x)=>{
+      solved_ids.add(x.problem_id);
+    })
     const questions = [];
     for (let i = 0; i < question_ids.length; i++) {
       questions.push({
         ...question_ids[i].problem,
         collection_id,
+        solved:solved_ids.has(question_ids[i].problem.problem_id),
       });
     }
     return questions;

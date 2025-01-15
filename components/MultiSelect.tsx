@@ -71,115 +71,122 @@ interface CollectionType {
 export const MultiSelect = React.forwardRef<
   HTMLButtonElement,
   MultiSelectProps
->(({ onValueChange, defaultValue = [], modalPopover = false, problem_id }) => {
-  // const options = []
-  const { id } = useUser();
-  const [collections, setCollections] = React.useState<
-    CollectionType[] | undefined
-  >([]);
-  React.useEffect(() => {
-    const getColls = async () => {
-      const x = await getUserPrivateCollections2({ user_id: id! });
-      setCollections(x);
-    };
-    if (id) {
-      getColls();
-    }
-  }, [id]);
-  const [selectedValues, setSelectedValues] =
-    React.useState<string[]>(defaultValue);
-  const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+>(
+  (
+    { onValueChange, defaultValue = [], modalPopover = false, problem_id },
+    refs
+  ) => {
+    // const options = []
+    const { id } = useUser();
+    const [collections, setCollections] = React.useState<
+      CollectionType[] | undefined
+    >([]);
+    React.useEffect(() => {
+      const getColls = async () => {
+        const x = await getUserPrivateCollections2({ user_id: id! });
+        setCollections(x);
+      };
+      if (id) {
+        getColls();
+      }
+    }, [id]);
+    const [selectedValues, setSelectedValues] =
+      React.useState<string[]>(defaultValue);
+    const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
-  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      setIsPopoverOpen(true);
-    } else if (event.key === "Backspace" && !event.currentTarget.value) {
-      const newSelectedValues = [...selectedValues];
-      newSelectedValues.pop();
+    const handleInputKeyDown = (
+      event: React.KeyboardEvent<HTMLInputElement>
+    ) => {
+      if (event.key === "Enter") {
+        setIsPopoverOpen(true);
+      } else if (event.key === "Backspace" && !event.currentTarget.value) {
+        const newSelectedValues = [...selectedValues];
+        newSelectedValues.pop();
+        setSelectedValues(newSelectedValues);
+        onValueChange(newSelectedValues);
+      }
+    };
+
+    const toggleOption = (option: string) => {
+      const newSelectedValues = selectedValues.includes(option)
+        ? selectedValues.filter((value) => value !== option)
+        : [...selectedValues, option];
       setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
-    }
-  };
+    };
 
-  const toggleOption = (option: string) => {
-    const newSelectedValues = selectedValues.includes(option)
-      ? selectedValues.filter((value) => value !== option)
-      : [...selectedValues, option];
-    setSelectedValues(newSelectedValues);
-    onValueChange(newSelectedValues);
-  };
-
-  return (
-    <Popover
-      open={isPopoverOpen}
-      onOpenChange={setIsPopoverOpen}
-      modal={modalPopover}
-    >
-      <PopoverTrigger asChild>
-        <MoreVertical className="cursor-pointer text-white h-4" />
-      </PopoverTrigger>
-      <PopoverContent
-        className="w-auto p-0"
-        align="start"
-        onEscapeKeyDown={() => setIsPopoverOpen(false)}
+    return (
+      <Popover
+        open={isPopoverOpen}
+        onOpenChange={setIsPopoverOpen}
+        modal={modalPopover}
       >
-        <Command>
-          <CommandInput
-            placeholder="Search..."
-            onKeyDown={handleInputKeyDown}
-          />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup>
-              {collections?.map((collection) => {
-                const isSelected = selectedValues.includes(
-                  collection.collection_id,
-                );
-                return (
-                  <CommandItem
-                    key={collection.collection_id}
-                    onSelect={() => toggleOption(collection.collection_id)}
-                    className="cursor-pointer"
-                  >
-                    <div
-                      className={cn(
-                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                        isSelected
-                          ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible",
-                      )}
-                    >
-                      <CheckIcon className="h-4 w-4" />
-                    </div>
-
-                    <span>{collection.name}</span>
-                  </CommandItem>
-                );
-              })}
-            </CommandGroup>
-
-            <CommandGroup>
-              <div className="flex items-center justify-between">
-                {
-                  <>
+        <PopoverTrigger asChild>
+          <MoreVertical className="cursor-pointer text-white h-4" />
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-auto p-0"
+          align="start"
+          onEscapeKeyDown={() => setIsPopoverOpen(false)}
+        >
+          <Command>
+            <CommandInput
+              placeholder="Search..."
+              onKeyDown={handleInputKeyDown}
+            />
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup>
+                {collections?.map((collection) => {
+                  const isSelected = selectedValues.includes(
+                    collection.collection_id
+                  );
+                  return (
                     <CommandItem
-                      onSelect={() => {
-                        addProblemToCollection(selectedValues, problem_id);
-                        setIsPopoverOpen(false);
-                      }}
-                      className="flex-1 justify-center cursor-pointer bg-black text-white"
+                      key={collection.collection_id}
+                      onSelect={() => toggleOption(collection.collection_id)}
+                      className="cursor-pointer"
                     >
-                      Submit
+                      <div
+                        className={cn(
+                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                          isSelected
+                            ? "bg-primary text-primary-foreground"
+                            : "opacity-50 [&_svg]:invisible"
+                        )}
+                      >
+                        <CheckIcon className="h-4 w-4" />
+                      </div>
+
+                      <span>{collection.name}</span>
                     </CommandItem>
-                  </>
-                }
-              </div>
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  );
-});
+                  );
+                })}
+              </CommandGroup>
+
+              <CommandGroup>
+                <div className="flex items-center justify-between">
+                  {
+                    <>
+                      <CommandItem
+                        onSelect={() => {
+                          addProblemToCollection(selectedValues, problem_id);
+                          setIsPopoverOpen(false);
+                        }}
+                        className="flex-1 justify-center cursor-pointer bg-black text-white"
+                      >
+                        Submit
+                      </CommandItem>
+                    </>
+                  }
+                </div>
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
+  }
+);
 
 MultiSelect.displayName = "MultiSelect";

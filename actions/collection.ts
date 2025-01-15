@@ -392,6 +392,7 @@ export const getCollectionQuestions = async (collection_id: string,user_id:strin
         problem: true,
       },
     });
+    
     const solved_ = await userSolvedIds(user_id);
     const solved_ids= new Set<number>();
     solved_?.map((x)=>{

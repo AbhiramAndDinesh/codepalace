@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { MultiSelect } from "@/components/MultiSelect";
+import { CircleCheckBig, Circle } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -11,9 +12,25 @@ export type Problem = {
   title: string;
   difficulty: string;
   slug: string;
+  solved: boolean;
 };
 
 export const columns: ColumnDef<Problem>[] = [
+  {
+    accessorKey: "solved",
+    header: () => <div className="">Solved</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-start pl-4">
+          {row.original.solved ? (
+            <CircleCheckBig size={20} className="text-gray-500 " />
+          ) : (
+            <Circle size={20} className="text-gray-500 " />
+          )}
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "title",
     header: () => <div className="md:w-[300px]">Problem</div>,

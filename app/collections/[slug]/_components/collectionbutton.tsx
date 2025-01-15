@@ -37,37 +37,37 @@ const CollectionButton = ({
       toast.error("Failed to Delete the collection");
     }
     if (res?.status === 200) {
-      toast.success("Successfully delete the collection");
+      toast.success("Collection has been deleted");
       router.push("/collections");
     }
   };
   const handlePublic = async () => {
     const res = await makePublic({ user_id, collection_id });
     if (!res) {
-      toast.error("Failed to make the Collection Public");
+      toast.error("Failed to set the Collection Public");
     }
     if (res?.status === 200) {
-      toast.success("Collection has been set to Public");
+      toast.success("Collection set to Public");
       router.refresh();
     }
   };
   const handlePrivate = async () => {
     const res = await makePrivate({ user_id, collection_id });
     if (!res) {
-      toast.error("Failed to make the Collection Private");
+      toast.error("Failed to set the Collection Private");
     }
     if (res?.status === 200) {
-      toast.success("Successfully made the collection Private");
+      toast.success("Collection set to Private");
       router.refresh();
     }
   };
   const handleUnsave = async () => {
     const res = await unsaveCollection(user_id, collection_id);
     if (!res) {
-      toast.error("Failed to Unsave COllection");
+      toast.error("Failed to remove collection");
     }
     if (res?.status == 200) {
-      toast.success("Successfully unsaved Collection");
+      toast.success("Removed collection from saved list");
       router.refresh();
     }
   };
@@ -77,7 +77,7 @@ const CollectionButton = ({
       toast.error("Failed to Save Collection");
     }
     if (res?.status == 200) {
-      toast.success("Successfully unsaved Collection");
+      toast.success("Saved collection");
       router.refresh();
     }
   };

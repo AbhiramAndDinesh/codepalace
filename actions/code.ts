@@ -166,6 +166,7 @@ export const getSubmissions = async (problem_id: number, user_id: string) => {
         failed_cases: true,
         time: true,
         memory: true,
+        submittedAt: true,
       },
       orderBy: {
         submittedAt: "desc",

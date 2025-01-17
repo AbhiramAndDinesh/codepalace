@@ -1,6 +1,7 @@
 "use client";
 import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -13,8 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { Button } from "./ui/button";
 import { useSession } from "next-auth/react";
 import { executeRun, executeSubmit } from "@/actions/code";
 import { Textarea } from "./ui/textarea";
@@ -111,32 +110,44 @@ const Playground = ({
 
   return (
     <div className="w-full h-full">
-      {successfullsolved && (
+      {/* {successfullsolved && (
         <Fireworks className="" autorun={{ speed: 7, duration: 750 }} />
-      )}
-      <Select
-        onValueChange={(
-          e: "c" | "c++" | "python" | "java" | "javascript" | "go",
-        ) => setLang(e)}
-        defaultValue={lang}
-      >
-        <SelectTrigger className="w-[180px] bg-white">
-          <SelectValue placeholder="Theme" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="javascript">Javascript</SelectItem>
-          <SelectItem value="python">Python</SelectItem>
-          <SelectItem value="java">Java</SelectItem>
-        </SelectContent>
-      </Select>
+      )} */}
 
       <ResizablePanelGroup direction="vertical">
-        <ResizablePanel defaultSize={60} className="relative">
+        <ResizablePanel
+          defaultSize={60}
+          maxSize={90}
+          className="relative border border-gray-500 rounded-lg"
+        >
+          <div className="min-h-10 bg-[#1c1818] border-b border-gray-500 flex justify-end pb-1 items-center">
+            <Select
+              onValueChange={(
+                e: "c" | "c++" | "python" | "java" | "javascript" | "go",
+              ) => setLang(e)}
+              defaultValue={lang}
+            >
+              <SelectTrigger className="w-[100px] text-gray-400 border-0 shadow-none translate-y-0.5">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent className="bg-secondaryDark w-[100px] border-gray-500">
+                <SelectItem value="javascript" className="bg-secondaryDark">
+                  Javascript
+                </SelectItem>
+                <SelectItem value="python">Python</SelectItem>
+                <SelectItem value="java">Java</SelectItem>
+                <SelectItem value="c">C</SelectItem>
+                <SelectItem value="c++">C++</SelectItem>
+                <SelectItem value="go">Go</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <Editor
             height="100%"
             defaultLanguage={lang}
             defaultValue={code}
-            theme="light"
+            theme="vs-dark"
             options={{
               fontSize: 14,
               minimap: {
@@ -151,45 +162,41 @@ const Playground = ({
             }}
             language={lang}
           />
-          <div className="flex gap-2 absolute bottom-1 right-1">
+          <div className="flex gap-1 absolute bottom-1 right-1">
             <Button
-              className="bg-blue-600 hover:bg-blue-200 hover:text-blue-600 font-[500] text-white px-2 py-1 rounded-sm"
+              className="bg-gray-400 duration-0 hover:bg-secondaryDark hover:text-red-500 font-spaceGrotesk text-secondaryDark font-semibold px-2 py-1 rounded-[5px] w-[70px]"
               onClick={handleRun}
             >
               Run
             </Button>
             <Button
-              className="bg-green-600 hover:bg-green-200 hover:text-green-600 font-[500] text-white px-2 py-1 rounded-sm"
+              className="bg-red-500 duration-0 hover:bg-secondaryDark border-red-500 hover:text-red-500 font-spaceGrotesk text-secondaryDar font-semibold rounded-[5px] px-2 py-1 w-[80px]"
               onClick={handleSubmit}
             >
               Submit
             </Button>
           </div>
         </ResizablePanel>
-        <ResizableHandle
-          withHandle
-          className="min-h-[5px] hover:bg-blue-500 bg-dark-layer-2"
-        />
+        <ResizableHandle className="min-h-[5px] bg-background" />
         <ResizablePanel
           defaultSize={40}
-          className="bg-white"
-          minSize={20}
-          maxSize={80}
+          className="border border-gray-500 rounded-lg"
+          maxSize={40}
         >
           <Textarea
-            className="bg-gray-200"
+            className="focus:border-none border-none hover:cursor-default border-gray-500"
             onChange={(e) => {
               setStdin(e.target.value);
             }}
           />
 
           {stdout && (
-            <div className="bg-gray-500">
+            <div className="">
               <h3>Output:</h3>
               <Textarea
                 disabled
                 defaultValue={stdout}
-                className="focus:border-none border-none hover:cursor-default"
+                className="focus:border-none border-none hover:cursor-default border-gray-500"
               />
             </div>
           )}

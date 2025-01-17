@@ -1,4 +1,5 @@
 import { getQuestionBySlug, userSolved } from "@/actions/question";
+import ReactMarkdown from "react-markdown";
 import Playground from "@/components/Playground";
 import {
   ResizableHandle,
@@ -8,7 +9,10 @@ import {
 import { auth, signIn } from "@/auth";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { getSubmissions } from "@/actions/code";
+import React from "react";
+import Submission from "@/components/Submission";
 
 interface Submissionstype {
   submission_id: string;
@@ -17,6 +21,7 @@ interface Submissionstype {
   failed_cases: number;
   time: string;
   memory: string;
+  submittedAt: Date;
 }
 const ProblemPage = async ({
   params,
@@ -44,66 +49,64 @@ const ProblemPage = async ({
     );
   const answer = problem.Answers == null ? "No answer" : problem.Answers.answer;
   return (
-    <div className="min-h-screen">
-      {/* <form
-        action={async () => {
-          "use server";
-          await signIn();
-        }}
-      >
-        <button
-          type="submit"
-          className="bg-black px-2 py-1 rounded-sm text-white"
+    <div className="min-h-screen bg-background">
+      <ResizablePanelGroup direction="horizontal" className="max-h-[100vh] p-3">
+        <ResizablePanel
+          defaultSize={45}
+          minSize={20}
+          className="border border-gray-500 rounded-lg mr-0.5"
         >
-          Sign in
-        </button>
-      </form> */}
-      {/* {solved && <div className="bg-green-500">Solved</div>} */}
+          <Tabs defaultValue="problem" className="w-full h-[100vh]">
+            <div className="w-full border-b border-gray-500 bg-[#1c1818]">
+              <TabsList className="">
+                <TabsTrigger value="problem" className="pt-1.5">
+                  Problem
+                </TabsTrigger>
+                <TabsTrigger value="solution" className="pt-1.5">
+                  Solution
+                </TabsTrigger>
+                <TabsTrigger value="submissions" className="pt-1.5">
+                  Submissions
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
-      <ResizablePanelGroup direction="horizontal" className="h-[100vh]">
-        <ResizablePanel defaultSize={45} minSize={20}>
-          <Tabs defaultValue="question" className="w-full h-[100vh]">
-            <TabsList>
-              <TabsTrigger value="question">Question</TabsTrigger>
-              <TabsTrigger value="submissions">Submissions</TabsTrigger>
-              <TabsTrigger value="answer">Answer</TabsTrigger>
-            </TabsList>
-            <TabsContent value="question" className="h-full">
-              <div className="w-full bg-blue-200 h-full">
+            <TabsContent value="problem" className="h-full">
+              <div className="w-full h-full">
+                <form
+                  action={async () => {
+                    "use server";
+                    await signIn();
+                  }}
+                >
+                  <button
+                    className="bg-white px-5 py-3 text-black rounded-full"
+                    type="submit"
+                  >
+                    Sign in
+                  </button>
+                </form>
                 <h1>
                   <code>{problem.title}</code>
                 </h1>
-                <div dangerouslySetInnerHTML={{ __html: problem.statement }} />
+                <ReactMarkdown>{problem.statement}</ReactMarkdown>
               </div>
             </TabsContent>
             <TabsContent value="submissions">
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center px-2 gap-2 transition-all">
                 {submissions.map((item) => {
-                  return (
-                    <div
-                      className="flex gap-4 text-black"
-                      key={item.submission_id}
-                    >
-                      <p>{item.accepted}</p>
-                      <p>{item.failed_cases}</p>
-                      <p>{item.time}</p>
-                      <p>{item.memory}</p>
-                    </div>
-                  );
+                  return <Submission item={item} key={item.submission_id} />;
                 })}
               </div>
             </TabsContent>
-            <TabsContent value="answer">
-              <p>{answer}</p>
+            <TabsContent value="solution">
+              <ReactMarkdown>{answer}</ReactMarkdown>
             </TabsContent>
           </Tabs>
         </ResizablePanel>
-        <ResizableHandle
-          className="w-[5px] hover:bg-blue-500 bg-dark-layer-2"
-          withHandle
-        />
+        <ResizableHandle className="w-[5px] bg-background" />
         <ResizablePanel className="h-[100vh]" defaultSize={65} minSize={40}>
-          <div className="w-full h-full p-3 bg-red-400">
+          <div className="w-full h-full">
             <Playground language="python" problem_id={problem.problem_id} />
           </div>
         </ResizablePanel>

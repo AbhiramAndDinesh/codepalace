@@ -11,6 +11,7 @@ const config: Config = {
     extend: {
       colors: {
         background: "#1A1919",
+        secondaryDark: "#1c1818",
         foreground: "hsl(var(--foreground))",
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -62,6 +63,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar-hide")],
 };
 export default config;

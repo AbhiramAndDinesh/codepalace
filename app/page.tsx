@@ -126,7 +126,8 @@ export default function Home() {
           "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]",
         )}
       />
-      <div className="w-full sm:mt-40 mt-32 flex flex-col">
+
+      <div className="w-full mt-32  flex flex-col">
         <div className="flex items-center gap-2">
           <Crown
             size={30}

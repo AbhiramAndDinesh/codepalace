@@ -1,12 +1,8 @@
 "use client";
 import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+import { ChevronUp, Play, Upload } from "lucide-react";
+
 import {
   Select,
   SelectContent,
@@ -16,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { useSession } from "next-auth/react";
 import { executeRun, executeSubmit } from "@/actions/code";
-import { Textarea } from "./ui/textarea";
+
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
 const Playground = ({
@@ -33,7 +29,10 @@ const Playground = ({
     // @ts-expect-error error will not occur
   >(language);
   const [stdin, setStdin] = useState("");
-  const [stdout, setStdout] = useState("");
+  const [stdout, setStdout] = useState(
+    "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+  );
+  const [sheet, setSheet] = useState<boolean>(false);
 
   const { data: session } = useSession();
   const [successfullsolved, setSuccessfullsolved] = useState(false);
@@ -109,99 +108,107 @@ const Playground = ({
   };
 
   return (
-    <div className="w-full h-full">
-      {/* {successfullsolved && (
+    <div className="h-full border border-gray-500 rounded-lg overflow-clip relative transition-all">
+      {successfullsolved && (
         <Fireworks className="" autorun={{ speed: 7, duration: 750 }} />
-      )} */}
-
-      <ResizablePanelGroup direction="vertical">
-        <ResizablePanel
-          defaultSize={60}
-          maxSize={90}
-          className="relative border border-gray-500 rounded-lg"
+      )}
+      <div className="min-h-10 border-b border-gray-500 flex justify-end pb-1 items-center ">
+        <Select
+          onValueChange={(
+            e: "c" | "c++" | "python" | "java" | "javascript" | "go",
+          ) => setLang(e)}
+          defaultValue={lang}
         >
-          <div className="min-h-10 bg-[#1c1818] border-b border-gray-500 flex justify-end pb-1 items-center">
-            <Select
-              onValueChange={(
-                e: "c" | "c++" | "python" | "java" | "javascript" | "go",
-              ) => setLang(e)}
-              defaultValue={lang}
-            >
-              <SelectTrigger className="w-[100px] text-gray-400 border-0 shadow-none translate-y-0.5">
-                <SelectValue placeholder="Theme" />
-              </SelectTrigger>
-              <SelectContent className="bg-secondaryDark w-[100px] border-gray-500">
-                <SelectItem value="javascript" className="bg-secondaryDark">
-                  Javascript
-                </SelectItem>
-                <SelectItem value="python">Python</SelectItem>
-                <SelectItem value="java">Java</SelectItem>
-                <SelectItem value="c">C</SelectItem>
-                <SelectItem value="c++">C++</SelectItem>
-                <SelectItem value="go">Go</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <SelectTrigger className="w-[100px] text-gray-400 font-spaceGrotesk border-0 shadow-none translate-y-0.5">
+            <SelectValue placeholder="Theme" />
+          </SelectTrigger>
+          <SelectContent className="bg-secondaryDark font-spaceGrotesk w-[100px] border-gray-500">
+            <SelectItem value="javascript" className="bg-secondaryDark">
+              Javascript
+            </SelectItem>
+            <SelectItem value="python">Python</SelectItem>
+            <SelectItem value="java">Java</SelectItem>
+            <SelectItem value="c">C</SelectItem>
+            <SelectItem value="c++">C++</SelectItem>
+            <SelectItem value="go">Go</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <Editor
-            height="100%"
-            defaultLanguage={lang}
-            defaultValue={code}
-            theme="vs-dark"
-            options={{
-              fontSize: 14,
-              minimap: {
-                enabled: false,
-              },
-            }}
-            value={code}
-            onChange={(e) => {
-              if (e) {
-                setCode(e);
-              }
-            }}
-            language={lang}
-          />
-          <div className="flex gap-1 absolute bottom-1 right-1">
-            <Button
-              className="bg-gray-400 duration-0 hover:bg-secondaryDark hover:text-red-500 font-spaceGrotesk text-secondaryDark font-semibold px-2 py-1 rounded-[5px] w-[70px]"
-              onClick={handleRun}
-            >
-              Run
-            </Button>
-            <Button
-              className="bg-red-500 duration-0 hover:bg-secondaryDark border-red-500 hover:text-red-500 font-spaceGrotesk text-secondaryDar font-semibold rounded-[5px] px-2 py-1 w-[80px]"
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-          </div>
-        </ResizablePanel>
-        <ResizableHandle className="min-h-[5px] bg-background" />
-        <ResizablePanel
-          defaultSize={40}
-          className="border border-gray-500 rounded-lg"
-          maxSize={40}
+      <Editor
+        height="90%"
+        defaultLanguage={lang}
+        defaultValue={code}
+        theme="vs-dark"
+        options={{
+          fontSize: 16,
+          minimap: {
+            enabled: false,
+          },
+          scrollbar: {
+            vertical: "hidden",
+            horizontal: "hidden",
+          },
+        }}
+        value={code}
+        onChange={(e) => {
+          if (e) {
+            setCode(e);
+          }
+        }}
+        language={lang}
+      />
+      <div className="w-full bottom-0 bg-background absolute min-h-10 pl-3 pr-4 border-t border-gray-500 flex items-center justify-between z-20">
+        <button
+          className="font-spaceGrotesk text-gray-400 hover:text-white text-sm  flex gap-1 items-center"
+          onClick={() => setSheet(!sheet)}
         >
-          <Textarea
-            className="focus:border-none border-none hover:cursor-default border-gray-500"
-            onChange={(e) => {
-              setStdin(e.target.value);
-            }}
-          />
-
-          {stdout && (
-            <div className="">
-              <h3>Output:</h3>
-              <Textarea
-                disabled
-                defaultValue={stdout}
-                className="focus:border-none border-none hover:cursor-default border-gray-500"
-              />
+          <ChevronUp className={`h-4 w-4 ${sheet && "rotate-180"}`} />
+          Console
+        </button>
+        <div className="flex gap-5">
+          <button
+            className="font-spaceGrotesk text-gray-400 hover:text-white text-sm flex gap-1 items-center"
+            onClick={handleRun}
+          >
+            <Play className="w-4 h-4" />
+            Run
+          </button>
+          <button
+            className="font-spaceGrotesk text-red-500 hover:text-red-300 text-sm flex gap-1 items-center"
+            onClick={handleSubmit}
+          >
+            <Upload className="w-4 h-4" />
+            Submit
+          </button>
+        </div>
+      </div>
+      <div
+        className={`absolute w-full h-full bg-background border-gray-500 p-3 ${sheet ? "translate-y-[-30%] border-t opacity-100" : "opacity-0"} transition-all z-10`}
+      >
+        <div className="flex gap-2 h-[25%]">
+          <div className="w-1/2 h-full">
+            <div className="text-gray-400 font-spaceGrotesk mb-1 text-sm">
+              Input
             </div>
-          )}
-        </ResizablePanel>
-      </ResizablePanelGroup>
+            <textarea
+              className="w-full h-full bg-background text-gray-400 text-sm p-2 rounded-lg border border-gray-500 focus:outline-none resize-none font-gabarito"
+              value={stdin}
+              onChange={(e) => setStdin(e.target.value)}
+            ></textarea>
+          </div>
+          <div className="w-1/2">
+            <div className="text-gray-400 font-spaceGrotesk mb-1 text-sm">
+              Output
+            </div>
+            <textarea
+              className="w-full h-full bg-background text-gray-400 text-sm p-2 rounded-lg border border-gray-500 focus:outline-none resize-none font-gabarito"
+              value={stdout}
+              disabled
+            ></textarea>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

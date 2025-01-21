@@ -1,13 +1,28 @@
 import { getQuestionBySlug, userSolved } from "@/actions/question";
 import ReactMarkdown from "react-markdown";
 import Playground from "@/components/Playground";
+import { CircleCheckBig, SquareCheckBig, CheckCheck } from "lucide-react";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { auth, signIn } from "@/auth";
+import { auth } from "@/auth";
 
+// import { signIn } from "@/auth"
+// <form
+//   action={async () => {
+//     "use server";
+//     await signIn();
+//   }}
+// >
+//   <button
+//     className="bg-white px-5 py-3 text-black rounded-full"
+//     type="submit"
+//   >
+//     Sign in
+//   </button>
+// </form>
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { getSubmissions } from "@/actions/code";
@@ -57,7 +72,7 @@ const ProblemPage = async ({
           className="border border-gray-500 rounded-lg mr-0.5"
         >
           <Tabs defaultValue="problem" className="w-full h-[100vh]">
-            <div className="w-full border-b border-gray-500 bg-[#1c1818]">
+            <div className="w-full border-b border-gray-500">
               <TabsList className="">
                 <TabsTrigger value="problem" className="pt-1.5">
                   Problem
@@ -71,21 +86,9 @@ const ProblemPage = async ({
               </TabsList>
             </div>
 
-            <TabsContent value="problem" className="h-full">
+            <TabsContent value="problem" className="h-full relative">
+              <CheckCheck className="text-red-500 w-6 h-6 absolute right-2 z-20" />
               <div className="w-full h-full">
-                <form
-                  action={async () => {
-                    "use server";
-                    await signIn();
-                  }}
-                >
-                  <button
-                    className="bg-white px-5 py-3 text-black rounded-full"
-                    type="submit"
-                  >
-                    Sign in
-                  </button>
-                </form>
                 <h1>
                   <code>{problem.title}</code>
                 </h1>
@@ -105,7 +108,7 @@ const ProblemPage = async ({
           </Tabs>
         </ResizablePanel>
         <ResizableHandle className="w-[5px] bg-background" />
-        <ResizablePanel className="h-[100vh]" defaultSize={65} minSize={40}>
+        <ResizablePanel defaultSize={65} minSize={40}>
           <div className="w-full h-full">
             <Playground language="python" problem_id={problem.problem_id} />
           </div>

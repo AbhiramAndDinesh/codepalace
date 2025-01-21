@@ -1,7 +1,7 @@
 import { getQuestionBySlug, userSolved } from "@/actions/question";
 import ReactMarkdown from "react-markdown";
 import Playground from "@/components/Playground";
-import { CircleCheckBig, SquareCheckBig, CheckCheck } from "lucide-react";
+import { CheckCheck } from "lucide-react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -87,7 +87,10 @@ const ProblemPage = async ({
             </div>
 
             <TabsContent value="problem" className="h-full relative">
-              <CheckCheck className="text-red-500 w-6 h-6 absolute right-2 z-20" />
+              {solved && (
+                <CheckCheck className="text-red-500 w-6 h-6 absolute right-2 z-20" />
+              )}
+
               <div className="w-full h-full">
                 <h1>
                   <code>{problem.title}</code>

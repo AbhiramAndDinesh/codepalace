@@ -21,16 +21,19 @@ const CreateCollection = ({ user_id }: { user_id: string }) => {
   const router = useRouter();
   const onCreate = async () => {
     console.log({ name, user_id });
-    if (name.length > 0 && slug.length > 0) {
+
+    try {
       const res = await createCollection({ name, user_id, slug });
       if (res?.status === 200) {
         toast.success("Collection Created Successfully");
         router.refresh();
-      } else {
-        toast.error("Failed to create Collection.Enter a unique slug");
       }
-    } else {
-      toast.error("Empty name or slug isn't valid");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Failed to create Collection.");
+    } finally {
+      setName("");
+      setSlug("");
     }
   };
   return (

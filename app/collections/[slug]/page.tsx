@@ -7,8 +7,6 @@ import {
 } from "@/actions/collection";
 import { auth } from "@/auth";
 import CollectionButton from "./_components/collectionbutton";
-import GridPattern from "@/components/ui/grid-pattern";
-import { cn } from "@/lib/utils";
 
 import { DataTable } from "./data-table";
 import { columns_owner } from "./columns-owner";
@@ -51,15 +49,6 @@ export default async function Page({
   return (
     <div className="p-5 overflow-hidden">
       <div className="w-full flex flex-col sm:mt-20 mt-12  gap-4">
-        <GridPattern
-          width={40}
-          height={40}
-          x={-1}
-          y={-1}
-          className={cn(
-            "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] -z-20 h-[300px]"
-          )}
-        />
         <div className="flex items-center justify-between gap-2 font-bold">
           <h2 className=" text-3xl font-spaceGrotesk text-red-500  ">
             {collectiondata?.name}

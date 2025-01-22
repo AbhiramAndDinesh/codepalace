@@ -1,16 +1,11 @@
 "use client";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+
+import { BookmarkX, Circle, CircleCheckBig } from "lucide-react";
 import { deleteProblemFromCollection } from "@/actions/collection";
 
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Problem = {
@@ -19,21 +14,46 @@ export type Problem = {
   difficulty: string;
   slug: string;
   collection_id: string;
+  solved: boolean;
 };
-
+const deleteProblem = async (collection_id: string, problem_id: number) => {
+  try {
+    const res = await deleteProblemFromCollection(collection_id, problem_id);
+    if (!res) {
+      toast.error("Failed to remove problem from collection");
+    }
+    if (res?.status === 200) {
+      window.location.reload();
+    }
+  } catch (error) {
+    toast.error("Something went wrong");
+    console.log(error);
+  }
+};
 export const columns_owner: ColumnDef<Problem>[] = [
   {
-    accessorKey: "problem_id",
-    header: "#",
+    accessorKey: "solved",
+    header: () => <div className="">Solved</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-start pl-4">
+          {row.original.solved ? (
+            <CircleCheckBig size={20} className="text-gray-500 " />
+          ) : (
+            <Circle size={20} className="text-gray-500 " />
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "title",
-    header: "Name",
+    header: () => <div className="md:w-[300px]">Problem</div>,
     cell: ({ row }) => {
       return (
         <Link
           href={`/problems/${row.original.slug}`}
-          className="hover:text-blue-400"
+          className="hover:text-blue-400 text-gray-300 pl-5"
         >
           {row.original.title}
         </Link>
@@ -42,15 +62,15 @@ export const columns_owner: ColumnDef<Problem>[] = [
   },
   {
     accessorKey: "difficulty",
-    header: "Difficulty",
+    header: () => <div className="text-center">Difficulty</div>,
     cell: ({ row }) => {
       const value = row.original.difficulty;
-      let background = "bg-green-400/80";
-      if (value === "Medium") background = "bg-orange-400";
-      if (value === "Hard") background = "bg-red-400";
+      let background = "text-green-400";
+      if (value === "Medium") background = "text-orange-400";
+      if (value === "Hard") background = "text-red-400";
       return (
         <div className={`${background} px-2 py-1 text-sm rounded-sm inline`}>
-          {value}
+          <p className="text-right">{value}</p>
         </div>
       );
     },
@@ -60,27 +80,15 @@ export const columns_owner: ColumnDef<Problem>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <Button
-              onClick={() => {
-                deleteProblemFromCollection(
-                  row.original.collection_id,
-                  row.original.problem_id,
-                );
-              }}
-            >
-              Delete
-            </Button>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex justify-end pr-4">
+          <BookmarkX
+            className="hover:cursor-pointer text-gray-500 hover:text-red-500"
+            size={20}
+            onClick={() =>
+              deleteProblem(row.original.collection_id, row.original.problem_id)
+            }
+          />
+        </div>
       );
     },
   },

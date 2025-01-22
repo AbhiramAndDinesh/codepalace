@@ -1,14 +1,18 @@
 import {
   getCollectionbySlug,
   getCollectionQuestions,
+  isCollectionPublic,
   isOwner,
   isSavedCollection,
 } from "@/actions/collection";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
-import { columns_owner } from "./columns-owner";
 import { auth } from "@/auth";
 import CollectionButton from "./_components/collectionbutton";
+import GridPattern from "@/components/ui/grid-pattern";
+import { cn } from "@/lib/utils";
+
+import { DataTable } from "./data-table";
+import { columns_owner } from "./columns-owner";
+import { columns } from "./columns";
 
 export default async function Page({
   params,
@@ -20,12 +24,17 @@ export default async function Page({
     return <div>User not found sign in!!</div>;
   }
   const user_id = session.user?.id || "";
+
   const { slug } = await params;
   const collectiondata = await getCollectionbySlug(slug);
   if (!collectiondata) {
     return <div>Collection doesnt exists</div>;
   }
   const owner = await isOwner(user_id, collectiondata.collection_id);
+  const ispublic = await isCollectionPublic(
+    user_id,
+    collectiondata.collection_id
+  );
   const saved = await isSavedCollection(user_id, collectiondata.collection_id);
   if (saved === undefined) {
     return;
@@ -33,25 +42,46 @@ export default async function Page({
   if (!owner && !collectiondata.isPublic) {
     return <div>This is a private Collection</div>;
   }
-  const problems = await getCollectionQuestions(collectiondata.collection_id);
-  console.log(problems);
+  const problems = await getCollectionQuestions(
+    collectiondata.collection_id,
+    user_id
+  );
+  // console.log(problems);
   if (!problems) return;
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center">
-      <p>Collection Name :{collectiondata?.name}</p>
-      <CollectionButton
-        owner={owner}
-        saved={saved}
-        user_id={user_id}
-        collection_id={collectiondata.collection_id}
-      />
-      <p>Problems: TODO</p>
-      <div className="w-[1000px]">
-        {owner ? (
-          <DataTable columns={columns_owner} data={problems} />
-        ) : (
-          <DataTable columns={columns} data={problems} />
-        )}
+    <div className="p-5 overflow-hidden">
+      <div className="w-full flex flex-col sm:mt-20 mt-12  gap-4">
+        <GridPattern
+          width={40}
+          height={40}
+          x={-1}
+          y={-1}
+          className={cn(
+            "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] -z-20 h-[300px]"
+          )}
+        />
+        <div className="flex items-center justify-between gap-2 font-bold">
+          <h2 className=" text-3xl font-spaceGrotesk text-red-500  ">
+            {collectiondata?.name}
+          </h2>
+          <div className="flex items-center justify-end gap-1">
+            {/* <ShareButton /> */}
+            <CollectionButton
+              owner={owner}
+              ispublic={ispublic}
+              saved={saved}
+              user_id={user_id}
+              collection_id={collectiondata.collection_id}
+            />
+          </div>
+        </div>
+        <div className="">
+          {owner ? (
+            <DataTable columns={columns_owner} data={problems} />
+          ) : (
+            <DataTable columns={columns} data={problems} />
+          )}
+        </div>
       </div>
     </div>
   );

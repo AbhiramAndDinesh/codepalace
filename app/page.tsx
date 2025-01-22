@@ -123,7 +123,7 @@ export default function Home() {
         x={-1}
         y={-1}
         className={cn(
-          "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]",
+          "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]"
         )}
       />
 

@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        mobile: "500px",
+      },
       colors: {
         background: "#1A1919",
         secondaryDark: "#1c1818",
@@ -60,6 +63,19 @@ const config: Config = {
       fontFamily: {
         spaceGrotesk: ["var(--font-spaceGrotesk)"],
         gabarito: ["var(--font-gabarito)"],
+      },
+      animation: {
+        grid: "grid 15s linear infinite",
+      },
+      keyframes: {
+        grid: {
+          "0%": {
+            transform: "translateY(-50%)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+          },
+        },
       },
     },
   },

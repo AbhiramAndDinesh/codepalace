@@ -24,15 +24,20 @@ interface Usertype {
   codeforcesContestsAttended: number | null;
 }
 export default function Page() {
-  const { email, id } = useUser();
+  const { email, id } = useUser() || {};
 
   const [user, setUser] = useState<Usertype | null>(null);
   useEffect(() => {
     // console.log("This came from the useUser: ", id, email);
     async function fetchProfile() {
       if (email) {
-        const userx = await getLeaderboardProfile(email);
-        setUser(userx);
+        try {
+          const userx = await getLeaderboardProfile(email);
+          if (!userx) throw new Error("Profile data is null or undefined");
+          setUser(userx);
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+        }
       }
     }
     fetchProfile();

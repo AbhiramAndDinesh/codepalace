@@ -22,13 +22,15 @@ const getLeaderboard = unstable_cache(
     return leaderboad;
   },
   ["leaderboardData"],
-  { revalidate: 10, tags: ["leaderboardData"] }
+  { revalidate: 10000, tags: ["leaderboardData"] },
 );
 export default async function Home() {
   const leaderBoard = await getLeaderboard();
   return (
-    <div className="min-h-screen w-full flex  flex-col items-center justify-center">
-      <p className="text-3xl p-2">Leader Board</p>
+    <div className="max-w-screen-md min-h-screen w-full mx-auto overflow-clip pt-24">
+      <p className="text-4xl font-spaceGrotesk font-semibold text-red-500">
+        Leader Board
+      </p>
       <DataTable columns={columns} data={leaderBoard} />
     </div>
   );

@@ -34,21 +34,20 @@ import {
 } from "@/components/ui/table";
 import { ArrowUpDown } from "lucide-react";
 
-
 export type Leaderboard = {
   user_id: string;
   username: string;
-  leetcodeProblemsSolved: number|null;
-  leetcodeRating: number|null;
-  leetcodeContestsAttended: number|null;
-//   lc_score: number;
-  codechefProblemsSolved: number|null;
-  codechefRating: number|null;
-  codechefContestsAttended: number|null;
-//   cc_score: number;
-  codeforcesRating: number|null;
-  codeforcesContestsAttended: number|null;
-//   cf_score: number;
+  leetcodeProblemsSolved: number | null;
+  leetcodeRating: number | null;
+  leetcodeContestsAttended: number | null;
+  //   lc_score: number;
+  codechefProblemsSolved: number | null;
+  codechefRating: number | null;
+  codechefContestsAttended: number | null;
+  //   cc_score: number;
+  codeforcesRating: number | null;
+  codeforcesContestsAttended: number | null;
+  //   cf_score: number;
 };
 
 export const columns: ColumnDef<Leaderboard>[] = [
@@ -182,7 +181,6 @@ export const columns: ColumnDef<Leaderboard>[] = [
       );
     },
   },
-
 ];
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -193,9 +191,11 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([{id:"username", desc:false}]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: "username", desc: false },
+  ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
@@ -219,13 +219,13 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    initialState:{
-      rowPinning:{
-        top:[],
+    initialState: {
+      rowPinning: {
+        top: [],
       },
-      pagination:{
-        pageSize:10,
-      }
+      pagination: {
+        pageSize: 10,
+      },
     },
     state: {
       sorting,
@@ -239,16 +239,21 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center py-4">
         <Input
           placeholder="Search User"
-          value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("username")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("username")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm mr-2 ml-2"
+          className="max-w-sm mr-2 border-red-500 focus:outline-none text-gray-400 placeholder:text-red-500"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto mr-2">
-              Columns 
+            <Button
+              variant="outline"
+              className="ml-auto mr-2 text-gray-400 border-gray-500 hover:bg-gray-500 hover:text-background"
+            >
+              Columns
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center">
@@ -272,19 +277,25 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
-        <Table className="">
+      <div className="rounded-md border border-red-500 overflow-clip">
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="bg-slate-100">
+              <TableRow
+                key={headerGroup.id}
+                className="bg-red-500 border-red-500"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="py-3 text-center">
+                    <TableHead
+                      key={header.id}
+                      className="py-3 text-center text-background border-red-500 font-medium font-spaceGrotesk"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -298,12 +309,13 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="border-red-500"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className=" text-center py-4">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -323,22 +335,22 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4 mr-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );

@@ -158,7 +158,7 @@ const Playground = ({
         }}
         language={lang}
       />
-      <div className="w-full  lg:bottom-0 bg-background absolute min-h-10 pl-3 pr-4 border-t border-gray-500 flex items-center justify-between z-20">
+      <div className="w-full bottom-20 lg:bottom-0 bg-background absolute min-h-10 pl-3 pr-4 border-t border-gray-500 flex items-center justify-between z-20">
         <button
           className="font-spaceGrotesk text-gray-400 hover:text-white text-sm  flex gap-1 items-center"
           onClick={() => setSheet(!sheet)}
@@ -184,10 +184,14 @@ const Playground = ({
         </div>
       </div>
       <div
-        className={`absolute w-full h-full bg-background border-gray-500 p-3 ${sheet ? "translate-y-[-30%] border-t opacity-100" : "opacity-0"} transition-all z-10`}
+        className={`absolute w-full h-full bg-background border-gray-500 p-3 ${
+          sheet
+            ? "lg:translate-y-[-30%] translate-y-[-350px] border-t opacity-100"
+            : "opacity-0"
+        } transition-all z-10`}
       >
-        <div className="flex gap-2 h-[25%]">
-          <div className="w-1/2 h-full">
+        <div className="flex gap-2 lg:h-[25%] max-lg:flex-wrap">
+          <div className="lg:w-1/2 h-full w-full">
             <div className="text-gray-400 font-spaceGrotesk mb-1 text-sm">
               Input
             </div>
@@ -197,7 +201,7 @@ const Playground = ({
               onChange={(e) => setStdin(e.target.value)}
             ></textarea>
           </div>
-          <div className="w-1/2">
+          <div className="lg:w-1/2 w-full">
             <div className="text-gray-400 font-spaceGrotesk mb-1 text-sm">
               Output
             </div>

@@ -53,7 +53,12 @@ export type Leaderboard = {
 export const columns: ColumnDef<Leaderboard>[] = [
   {
     accessorKey: "user_id",
-    header: "Rank",
+    header: () => {
+      return <div className="w-[100px]">Rank</div>;
+    },
+    cell: ({ row }) => {
+      return <div className="w-[100px]">{row.index + 1}</div>;
+    },
   },
   {
     accessorKey: "username",
@@ -62,9 +67,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           Username
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -76,9 +82,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           Leetcode Solved
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -90,9 +97,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           LeetCode Rating
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -104,9 +112,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           Leetcode Contests
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -118,9 +127,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           Codechef Solved
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -132,9 +142,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           Codechef Rating
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -146,9 +157,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           Codechef Contests
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -160,9 +172,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           Codeforces Rating
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -174,9 +187,10 @@ export const columns: ColumnDef<Leaderboard>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-gray-400"
         >
           Codeforces Contests
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -245,7 +259,7 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn("username")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm mr-2 border-red-500 focus:outline-none text-gray-400 placeholder:text-red-500"
+          className="max-w-sm mr-2 focus:outline-none text-gray-400 border-gray-500 bg-background"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -256,7 +270,10 @@ export function DataTable<TData, TValue>({
               Columns
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="center">
+          <DropdownMenuContent
+            align="center"
+            className="bg-background text-gray-400 border border-gray-500"
+          >
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -264,7 +281,7 @@ export function DataTable<TData, TValue>({
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize text-center"
+                    className="capitalize text-center hover:bg-green-500 hover:text-background"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
@@ -277,39 +294,39 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border border-red-500 overflow-clip">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="bg-red-500 border-red-500"
-              >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className="py-3 text-center text-background border-red-500 font-medium font-spaceGrotesk"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+      <div className="rounded-md border border-gray-500 overflow-clip">
+        {table.getRowModel().rows?.length ? (
+          <Table className="scroll">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow
+                  key={headerGroup.id}
+                  className=" border-gray-500 font-spaceGrotesk"
+                >
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead
+                        key={header.id}
+                        className="py-3 text-center text-gray-400  bg-background font-medium font-spaceGrotesk"
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="border-red-500"
+                  className="border-red-500 text-gray-400 bg-background"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className=" text-center py-4">
@@ -320,19 +337,14 @@ export function DataTable<TData, TValue>({
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className="w-full flex justify-center items-center font-space font-spaceGrotesk font-medium bg-background text-red-500 py-12">
+            No Results
+          </div>
+        )}
       </div>
       <div className="flex items-center justify-end space-x-2 py-4 mr-2">
         <Button
@@ -340,6 +352,7 @@ export function DataTable<TData, TValue>({
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
+          className={`text-gray-400 ${!table.getCanPreviousPage() && "hover:bg-gray-500 hover:text-background"}`}
         >
           Previous
         </Button>
@@ -348,6 +361,7 @@ export function DataTable<TData, TValue>({
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
+          className={`text-gray-400 ${!table.getCanPreviousPage() && "hover:bg-gray-500 hover:text-background"}`}
         >
           Next
         </Button>

@@ -30,7 +30,7 @@ const Playground = ({
   >(language);
   const [stdin, setStdin] = useState("");
   const [stdout, setStdout] = useState(
-    "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
   );
   const [sheet, setSheet] = useState<boolean>(false);
 
@@ -115,14 +115,14 @@ const Playground = ({
       <div className="min-h-10 border-b border-gray-500 flex justify-end pb-1 items-center ">
         <Select
           onValueChange={(
-            e: "c" | "c++" | "python" | "java" | "javascript" | "go",
+            e: "c" | "c++" | "python" | "java" | "javascript" | "go"
           ) => setLang(e)}
           defaultValue={lang}
         >
           <SelectTrigger className="w-[100px] text-gray-400 font-spaceGrotesk border-0 shadow-none translate-y-0.5">
             <SelectValue placeholder="Theme" />
           </SelectTrigger>
-          <SelectContent className="bg-secondaryDark font-spaceGrotesk w-[100px] border-gray-500">
+          <SelectContent className="bg-secondaryDark font-spaceGrotesk w-[120px] border-gray-500">
             <SelectItem value="javascript" className="bg-secondaryDark">
               Javascript
             </SelectItem>
@@ -158,7 +158,7 @@ const Playground = ({
         }}
         language={lang}
       />
-      <div className="w-full bottom-0 bg-background absolute min-h-10 pl-3 pr-4 border-t border-gray-500 flex items-center justify-between z-20">
+      <div className="w-full  lg:bottom-0 bg-background absolute min-h-10 pl-3 pr-4 border-t border-gray-500 flex items-center justify-between z-20">
         <button
           className="font-spaceGrotesk text-gray-400 hover:text-white text-sm  flex gap-1 items-center"
           onClick={() => setSheet(!sheet)}

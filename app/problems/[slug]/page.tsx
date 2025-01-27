@@ -77,6 +77,9 @@ const ProblemPage = async ({
                 <TabsTrigger value="problem" className="pt-1.5">
                   Problem
                 </TabsTrigger>
+                <TabsTrigger value="ide" className="pt-1.5 lg:hidden">
+                  Ide
+                </TabsTrigger>
                 <TabsTrigger value="solution" className="pt-1.5">
                   Solution
                 </TabsTrigger>
@@ -98,6 +101,11 @@ const ProblemPage = async ({
                 <ReactMarkdown>{problem.statement}</ReactMarkdown>
               </div>
             </TabsContent>
+            <TabsContent value="ide" className="h-full">
+              <div className="w-full h-full">
+                <Playground language="python" problem_id={problem.problem_id} />
+              </div>
+            </TabsContent>
             <TabsContent value="submissions">
               <div className="flex flex-col items-center px-2 gap-2 transition-all">
                 {submissions.map((item) => {
@@ -105,13 +113,18 @@ const ProblemPage = async ({
                 })}
               </div>
             </TabsContent>
+
             <TabsContent value="solution">
               <ReactMarkdown>{answer}</ReactMarkdown>
             </TabsContent>
           </Tabs>
         </ResizablePanel>
         <ResizableHandle className="w-[5px] bg-background" />
-        <ResizablePanel defaultSize={65} minSize={40}>
+        <ResizablePanel
+          defaultSize={65}
+          minSize={40}
+          className="lg:flex hidden"
+        >
           <div className="w-full h-full">
             <Playground language="python" problem_id={problem.problem_id} />
           </div>

@@ -11,7 +11,6 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import CreateCollectionModel from "./CreateCollectionModel";
-import GridPattern from "../ui/grid-pattern";
 interface Collection {
   collection_id: string;
   name: string;
@@ -61,16 +60,7 @@ const ShowCollections = ({
     }
   };
   return (
-    <div className="p-5">
-      <GridPattern
-        width={40}
-        height={40}
-        x={-1}
-        y={-1}
-        className={cn(
-          "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] -z-20 h-[300px]"
-        )}
-      />
+    <div className="">
       <div className="w-full flex flex-col sm:mt-20 mt-12  gap-4">
         <div className="flex items-center gap-2 font-bold">
           <h2 className=" text-3xl font-spaceGrotesk text-red-500 ">
@@ -88,7 +78,6 @@ const ShowCollections = ({
               <BookLock size={20} color="#d1d5db" />
             </div>
             <CreateCollectionModel user_id={user_id} />
-            
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3  max-mobile:flex max-mobile:flex-col max-mobile:gap-4 max-mobile:justify-center max-sm:pr-1  gap-4 ">

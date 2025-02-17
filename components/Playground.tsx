@@ -30,7 +30,7 @@ const Playground = ({
   >(language);
   const [stdin, setStdin] = useState("");
   const [stdout, setStdout] = useState(
-    "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
   );
   const [sheet, setSheet] = useState<boolean>(false);
 
@@ -115,7 +115,7 @@ const Playground = ({
       <div className="min-h-10 border-b border-gray-500 flex justify-end pb-1 items-center ">
         <Select
           onValueChange={(
-            e: "c" | "c++" | "python" | "java" | "javascript" | "go"
+            e: "c" | "c++" | "python" | "java" | "javascript" | "go",
           ) => setLang(e)}
           defaultValue={lang}
         >

@@ -51,15 +51,6 @@ const QuestionsPage = async () => {
   }
   return (
     <div className="p-10 absolute left-0 right-0 max-w-screen-md m-auto">
-      <div className="w-full flex gap-5 py-5">
-        <div className="course">
-          <p>Learn Java</p>
-        </div>
-        <div className="course">
-          <p>Learn Python</p>
-        </div>
-      </div>
-
       <div>
         <h3 className="text-2xl mb-5 font-spaceGrotesk text-gray-300">
           Collections

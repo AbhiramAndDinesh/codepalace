@@ -19,11 +19,6 @@ interface Questionsdata {
   solved: boolean;
 }
 const QuestionsPage = async () => {
-  // const headersList = headers();
-  // const referer = (await headersList).get("referer");
-  // const url = referer ? new URL(referer) : null;
-  // const pathname = url?.pathname || "/";
-  //
   const session = await auth();
   const user_id = session?.user?.id || "";
   const arr = [1, 2, 3, 4, 5, 6];

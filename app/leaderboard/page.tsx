@@ -1,10 +1,8 @@
-import { columns } from "@/components/datatable";
-import { DataTable } from "@/components/datatable";
 import { prisma as db } from "@/prisma";
 import { unstable_cache } from "next/cache";
 import { cn } from "@/lib/utils";
+import GridExample from "./ag-grid";
 import GridPattern from "@/components/ui/grid-pattern";
-import { DotPattern } from "@/components/ui/dot-pattern";
 
 const getLeaderboard = unstable_cache(
   async () => {
@@ -30,7 +28,7 @@ const getLeaderboard = unstable_cache(
 export default async function Home() {
   const leaderBoard = await getLeaderboard();
   return (
-    <div className="max-w-screen-md min-h-screen w-full mx-auto overflow-clip pt-24 p-4">
+    <div className="max-w-screen-md h-[100vh] w-full mx-auto overflow-x-visible pt-24 p-4">
       <GridPattern
         width={50}
         height={50}
@@ -40,16 +38,12 @@ export default async function Home() {
           "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]",
         )}
       />
-      {/* <DotPattern
-        className={cn(
-          "[mask-image:linear-gradient(to_bottom,gray,transparent,transparent)]",
-          "fill-red-500 z-[-100]",
-        )}
-      /> */}
-      <p className="text-5xl font-spaceGrotesk font-semibold text-red-500">
+      <p className="text-5xl font-spaceGrotesk font-semibold text-red-500 mb-5">
         Leader Board
       </p>
-      <DataTable columns={columns} data={leaderBoard} />
+      <div className="h-[75vh]">
+        <GridExample data={leaderBoard} />
+      </div>
     </div>
   );
 }

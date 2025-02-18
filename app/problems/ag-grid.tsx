@@ -64,6 +64,7 @@ const GridExample = ({ data }: { data: Questionsdata[] }) => {
     {
       field: "title",
       filter: true,
+      minWidth: 200,
       cellRenderer: (props) => {
         return (
           <Link href={`/problems/${props.data.slug}`} className="font-medium">
@@ -77,18 +78,31 @@ const GridExample = ({ data }: { data: Questionsdata[] }) => {
       field: "difficulty",
       filter: true,
       cellRenderer: DifficultyComponent,
+      width: 150,
     },
   ]);
 
   return (
     <div className="h-full">
-      <AgGridReact<Questionsdata>
-        rowData={data}
-        // @ts-expect-error - I don't know why this ts error is occuring
-        columnDefs={colDefs}
-        theme={myTheme}
-        pagination={true}
-      />
+      <div className="h-full max-md:hidden">
+        <AgGridReact<Questionsdata>
+          rowData={data}
+          // @ts-expect-error - I don't know why this ts error is occuring
+          columnDefs={colDefs}
+          theme={myTheme}
+          pagination={true}
+          paginationPageSize={20}
+        />
+      </div>
+      <div className="h-full md:hidden">
+        <AgGridReact<Questionsdata>
+          rowData={data}
+          // @ts-expect-error - I don't know why this ts error is occuring
+          columnDefs={colDefs}
+          theme={myTheme}
+          pagination={false}
+        />
+      </div>
     </div>
   );
 };

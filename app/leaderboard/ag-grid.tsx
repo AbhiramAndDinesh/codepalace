@@ -49,11 +49,37 @@ const GridExample = ({ data }: { data: LeaderBoardInterface[] }) => {
     { field: "leetcodeContestsAttended", filter: true, hide: false },
   ]);
 
+  const [colDefsMobile, setColDefsMobile] = useState([
+    { field: "user_id", width: 100 },
+    { field: "username", filter: true },
+    { field: "codechefRating", filter: true },
+    { field: "codechefProblemsSolved", filter: true, hide: false },
+    { field: "codechefContestsAttended", filter: true, hide: false },
+    { field: "codeforcesRating", filter: true },
+    { field: "codeforcesContestsAttended", filter: true, hide: false },
+    { field: "leetcodeRating", filter: true },
+    { field: "leetcodeProblemsSolved", filter: true, hide: false },
+    { field: "leetcodeContestsAttended", filter: true, hide: false },
+  ]);
+
   const columnStateChange = () => {
     if (allVisible) {
       setColDefs([
         { field: "user_id", pinned: "left", width: 100 },
         { field: "username", pinned: "left", filter: true },
+        { field: "codechefRating", filter: true },
+        { field: "codechefProblemsSolved", filter: true, hide: false },
+        { field: "codechefContestsAttended", filter: true, hide: false },
+        { field: "codeforcesRating", filter: true },
+        { field: "codeforcesContestsAttended", filter: true, hide: false },
+        { field: "leetcodeRating", filter: true },
+        { field: "leetcodeProblemsSolved", filter: true, hide: false },
+        { field: "leetcodeContestsAttended", filter: true, hide: false },
+      ]);
+
+      setColDefsMobile([
+        { field: "user_id", width: 100 },
+        { field: "username", filter: true },
         { field: "codechefRating", filter: true },
         { field: "codechefProblemsSolved", filter: true, hide: false },
         { field: "codechefContestsAttended", filter: true, hide: false },
@@ -77,6 +103,19 @@ const GridExample = ({ data }: { data: LeaderBoardInterface[] }) => {
         { field: "leetcodeProblemsSolved", filter: true, hide: true },
         { field: "leetcodeContestsAttended", filter: true, hide: true },
       ]);
+
+      setColDefsMobile([
+        { field: "user_id", width: 100 },
+        { field: "username", filter: true },
+        { field: "codechefRating", filter: true },
+        { field: "codechefProblemsSolved", filter: true, hide: true },
+        { field: "codechefContestsAttended", filter: true, hide: true },
+        { field: "codeforcesRating", filter: true },
+        { field: "codeforcesContestsAttended", filter: true, hide: true },
+        { field: "leetcodeRating", filter: true },
+        { field: "leetcodeProblemsSolved", filter: true, hide: true },
+        { field: "leetcodeContestsAttended", filter: true, hide: true },
+      ]);
       setAllVisible(true);
     }
   };
@@ -89,13 +128,23 @@ const GridExample = ({ data }: { data: LeaderBoardInterface[] }) => {
       >
         {allVisible ? "Show More" : "Show Less"}
       </Button>
-      <AgGridReact<LeaderBoardInterface>
-        rowData={data}
-        // @ts-expect-error - I don't know why this ts error is occuring
-        columnDefs={colDefs}
-        theme={myTheme}
-        pagination={true}
-      />
+      <div className="h-full max-md:hidden">
+        <AgGridReact<LeaderBoardInterface>
+          rowData={data}
+          // @ts-expect-error - I don't know why this ts error is occuring
+          columnDefs={colDefs}
+          theme={myTheme}
+          pagination={true}
+        />
+      </div>
+      <div className="h-full md:hidden">
+        <AgGridReact<LeaderBoardInterface>
+          rowData={data}
+          // @ts-expect-error - I don't know why this ts error is occuring
+          columnDefs={colDefsMobile}
+          theme={myTheme}
+        />
+      </div>
     </div>
   );
 };

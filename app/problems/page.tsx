@@ -44,7 +44,7 @@ const QuestionsPage = async () => {
     return <h1>Loading</h1>;
   }
   return (
-    <div className="p-10 pt-16 left-0 right-0 max-w-screen-md m-auto">
+    <div className="p-3 pt-16 left-0 right-0 max-w-screen-md m-auto">
       <GridPattern
         width={50}
         height={50}

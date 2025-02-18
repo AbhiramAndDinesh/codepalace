@@ -7,12 +7,12 @@ const CollectionsLayout = ({ children }: { children: ReactNode }) => {
     <div>
       <div className="min-h-[100vh] max-w-screen-md mx-auto p-5">
         <GridPattern
-          width={40}
-          height={40}
+          width={50}
+          height={50}
           x={-1}
           y={-1}
           className={cn(
-            "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] -z-20 h-[300px]"
+            "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]",
           )}
         />
         {children}

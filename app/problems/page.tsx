@@ -1,10 +1,10 @@
 import { getQuestions, userSolvedIds } from "@/actions/question";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
 import { auth } from "@/auth";
+import GridExample from "./ag-grid";
+import GridPattern from "@/components/ui/grid-pattern";
+import { cn } from "@/lib/utils";
 
-// import { headers } from "next/headers";
-interface Questionsdata {
+export interface Questionsdata {
   problem_id: number;
   title: string;
   slug: string;
@@ -21,7 +21,6 @@ interface Questionsdata {
 const QuestionsPage = async () => {
   const session = await auth();
   const user_id = session?.user?.id || "";
-  const arr = [1, 2, 3, 4, 5, 6];
   const questions_ = await getQuestions();
   const solved_ids = await userSolvedIds(user_id);
   const solved_ = new Set<number>();
@@ -45,27 +44,21 @@ const QuestionsPage = async () => {
     return <h1>Loading</h1>;
   }
   return (
-    <div className="p-10 absolute left-0 right-0 max-w-screen-md m-auto">
-      <div>
-        <h3 className="text-2xl mb-5 font-spaceGrotesk text-gray-300">
-          Collections
-        </h3>
-        <div className="w-full grid sm:grid-cols-3 grid-cols-2 gap-2 mb-5">
-          {arr.map((index) => (
-            <div key={index} className="relative">
-              <div className="hover:cursor-pointer border bg-[#1A1919] border-red-700 border-dashed text-gray-300 hover:translate-x-1 hover:-translate-y-1 transition-all duration-100 rounded-md p-3 w-full flex justify-center items-center">
-                <p className="font-spaceGrotesk text-sm text-red-600">
-                  collection {index}fsjkdlfaksd
-                </p>
-              </div>
-              <div className="absolute h-full rounded-md z-[-1] border border-red-700 border-dashed bg-red-700 w-full top-0 left-0"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="">
-        <DataTable columns={columns} data={questions} />
+    <div className="p-10 pt-16 left-0 right-0 max-w-screen-md m-auto">
+      <GridPattern
+        width={50}
+        height={50}
+        x={-1}
+        y={-1}
+        className={cn(
+          "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]",
+        )}
+      />
+      <h3 className="text-4xl mb-3 font-spaceGrotesk font-semibold text-red-500">
+        Problems
+      </h3>
+      <div className="h-[80vh]">
+        <GridExample data={questions} />
       </div>
     </div>
   );

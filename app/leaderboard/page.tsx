@@ -28,7 +28,7 @@ const getLeaderboard = unstable_cache(
 export default async function Home() {
   const leaderBoard = await getLeaderboard();
   return (
-    <div className="max-w-screen-md h-[100vh] w-full mx-auto overflow-x-visible pt-24 p-4">
+    <div className="max-w-screen-md h-[100vh] w-full mx-auto overflow-x-visible pt-16 p-4">
       <GridPattern
         width={50}
         height={50}
@@ -38,10 +38,10 @@ export default async function Home() {
           "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]",
         )}
       />
-      <p className="text-5xl font-spaceGrotesk font-semibold text-red-500 mb-5">
-        Leader Board
+      <p className="text-4xl font-spaceGrotesk font-semibold text-red-500 mb-3">
+        Leaderboard
       </p>
-      <div className="h-[75vh]">
+      <div className="h-[80vh]">
         <GridExample data={leaderBoard} />
       </div>
     </div>

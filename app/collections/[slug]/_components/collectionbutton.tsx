@@ -85,7 +85,7 @@ const CollectionButton = ({
     <div className="flex justify-end items-center gap-2">
       {owner && (
         <Button
-          className="p-2 h-6 w-6"
+          className="h-10 w-10"
           variant={"red"}
           onClick={() => {
             handleDelete();
@@ -97,7 +97,7 @@ const CollectionButton = ({
       )}
       {owner && ispublic && (
         <Button
-          className="p-2 h-6 w-6"
+          className="h-10 w-10"
           variant={"red"}
           onClick={() => {
             handlePrivate();
@@ -108,7 +108,7 @@ const CollectionButton = ({
       )}
       {owner && !ispublic && (
         <Button
-          className="p-2 h-6 w-6"
+          className="h-10 w-10"
           variant={"red"}
           onClick={() => {
             handlePublic();

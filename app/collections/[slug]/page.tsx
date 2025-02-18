@@ -7,10 +7,8 @@ import {
 } from "@/actions/collection";
 import { auth } from "@/auth";
 import CollectionButton from "./_components/collectionbutton";
-
-import { DataTable } from "./data-table";
-import { columns_owner } from "./columns-owner";
-import { columns } from "./columns";
+import GridExample from "./ag-grid";
+import OwnerDataTable from "./ag-grid-owner";
 
 export default async function Page({
   params,
@@ -31,7 +29,7 @@ export default async function Page({
   const owner = await isOwner(user_id, collectiondata.collection_id);
   const ispublic = await isCollectionPublic(
     user_id,
-    collectiondata.collection_id
+    collectiondata.collection_id,
   );
   const saved = await isSavedCollection(user_id, collectiondata.collection_id);
   if (saved === undefined) {
@@ -42,15 +40,15 @@ export default async function Page({
   }
   const problems = await getCollectionQuestions(
     collectiondata.collection_id,
-    user_id
+    user_id,
   );
   // console.log(problems);
   if (!problems) return;
   return (
     <div className="p-5 overflow-hidden">
       <div className="w-full flex flex-col sm:mt-20 mt-12  gap-4">
-        <div className="flex items-center justify-between gap-2 font-bold">
-          <h2 className=" text-3xl font-spaceGrotesk text-red-500  ">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className=" text-4xl font-semibold font-spaceGrotesk text-red-500  ">
             {collectiondata?.name}
           </h2>
           <div className="flex items-center justify-end gap-1">
@@ -64,11 +62,11 @@ export default async function Page({
             />
           </div>
         </div>
-        <div className="">
+        <div className="h-[75vh]">
           {owner ? (
-            <DataTable columns={columns_owner} data={problems} />
+            <OwnerDataTable data={problems} />
           ) : (
-            <DataTable columns={columns} data={problems} />
+            <GridExample data={problems} />
           )}
         </div>
       </div>

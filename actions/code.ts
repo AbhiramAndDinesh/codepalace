@@ -94,6 +94,7 @@ export const executeSubmit = async ({
       data: {
         problem_id,
         user_id,
+        language,
         code: source_code,
         accepted: failed.length === 0,
         failed_cases: failed.length,

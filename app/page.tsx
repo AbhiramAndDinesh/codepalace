@@ -123,7 +123,7 @@ export default function Home() {
         x={-1}
         y={-1}
         className={cn(
-          "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]"
+          "[mask-image:linear-gradient(to_bottom_left,white,transparent,transparent)] z-[-10]",
         )}
       />
 
@@ -156,17 +156,17 @@ export default function Home() {
       {/* Content Cards */}
       <div className="mt-16 sm:grid sm:grid-cols-3 gap-7">
         <HoverCard
-          href={"/"}
+          href={"/leaderboard"}
           heading="Leaderboard"
           des="See where you stand in the community and challenge yourself to climb higher."
         />
         <HoverCardReverse
-          href={"/"}
+          href={"/collections"}
           heading="Collections"
           des="Create, share, and explore sets of problems—private for personal practice or public for collaboration."
         />
         <HoverCard
-          href={"/"}
+          href={"/course"}
           heading="Courses"
           des="Learn Java and Python with beginner-friendly courses—more languages coming soon!"
         />

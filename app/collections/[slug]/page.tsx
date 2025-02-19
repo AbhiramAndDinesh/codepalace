@@ -20,7 +20,7 @@ export default async function Page({
     return <div>User not found sign in!!</div>;
   }
   const user_id = session.user?.id || "";
-
+  console.log(user_id);
   const { slug } = await params;
   const collectiondata = await getCollectionbySlug(slug);
   if (!collectiondata) {
@@ -29,7 +29,7 @@ export default async function Page({
   const owner = await isOwner(user_id, collectiondata.collection_id);
   const ispublic = await isCollectionPublic(
     user_id,
-    collectiondata.collection_id,
+    collectiondata.collection_id
   );
   const saved = await isSavedCollection(user_id, collectiondata.collection_id);
   if (saved === undefined) {
@@ -40,10 +40,9 @@ export default async function Page({
   }
   const problems = await getCollectionQuestions(
     collectiondata.collection_id,
-    user_id,
+    user_id
   );
-  // console.log(problems);
-  if (!problems) return;
+  console.log(problems);
   return (
     <div className="p-5 overflow-hidden">
       <div className="w-full flex flex-col sm:mt-20 mt-12  gap-4">
@@ -51,7 +50,8 @@ export default async function Page({
           <h2 className=" text-4xl font-semibold font-spaceGrotesk text-red-500  ">
             {collectiondata?.name}
           </h2>
-          <div className="flex items-center justify-end gap-1">
+          <div className="flex items-center justify-end gap-2">
+            {/* <Addquestion data={problems} /> */}
             {/* <ShareButton /> */}
             <CollectionButton
               owner={owner}
@@ -64,9 +64,9 @@ export default async function Page({
         </div>
         <div className="h-[75vh]">
           {owner ? (
-            <OwnerDataTable data={problems} />
+            <OwnerDataTable data={problems || []} />
           ) : (
-            <GridExample data={problems} />
+            <GridExample data={problems || []} />
           )}
         </div>
       </div>

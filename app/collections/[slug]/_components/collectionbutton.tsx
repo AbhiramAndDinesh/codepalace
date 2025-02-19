@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import {
   LockKeyhole,
   LockKeyholeOpen,
+  Plus,
   Save,
   SaveOff,
   Trash2,
@@ -83,6 +84,18 @@ const CollectionButton = ({
   };
   return (
     <div className="flex justify-end items-center gap-2">
+      {/* {owner && (
+        <Button
+          className="h-10 w-10"
+          variant={"red"}
+          onClick={() => {
+            // handleDelete();
+            console.log("Adding");
+          }}
+        >
+          <Plus />
+        </Button>
+      )} */}
       {owner && (
         <Button
           className="h-10 w-10"

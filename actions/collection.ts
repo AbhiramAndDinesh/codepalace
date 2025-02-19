@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "@/prisma";
-import { userSolvedIds } from "./question";
+import { getQuestions, userSolvedIds } from "./question";
 
 export const isOwner = async (user_id: string, collection_id: string) => {
   try {
@@ -382,7 +382,10 @@ export const deleteProblemFromCollection = async (
   }
 };
 
-export const getCollectionQuestions = async (collection_id: string,user_id:string) => {
+export const getCollectionQuestions = async (
+  collection_id: string,
+  user_id: string
+) => {
   try {
     const question_ids = await prisma.jCollectionProblem.findMany({
       where: {
@@ -392,18 +395,18 @@ export const getCollectionQuestions = async (collection_id: string,user_id:strin
         problem: true,
       },
     });
-    
+
     const solved_ = await userSolvedIds(user_id);
-    const solved_ids= new Set<number>();
-    solved_?.map((x)=>{
+    const solved_ids = new Set<number>();
+    solved_?.map((x) => {
       solved_ids.add(x.problem_id);
-    })
+    });
     const questions = [];
     for (let i = 0; i < question_ids.length; i++) {
       questions.push({
         ...question_ids[i].problem,
         collection_id,
-        solved:solved_ids.has(question_ids[i].problem.problem_id),
+        solved: solved_ids.has(question_ids[i].problem.problem_id),
       });
     }
     return questions;
@@ -412,5 +415,65 @@ export const getCollectionQuestions = async (collection_id: string,user_id:strin
       "Error in actions/collection.ts > getCollectionQuetions",
       error
     );
+  }
+};
+
+export const getAddtoCollectionQuestions = async (
+  collection_id: string,
+  user_id: string
+) => {
+  try {
+    const existingQuestions = await getCollectionQuestions(
+      collection_id,
+      user_id
+    );
+    const existingQues = new Set();
+    if (existingQuestions) {
+      for (let i = 0; i < existingQuestions.length; i++) {
+        existingQues.add(existingQuestions[i].problem_id);
+      }
+    }
+    const questions = await getQuestions();
+    const questionsTobeAdded = [];
+    if (questions) {
+      for (let i = 0; i < questions.length; i++) {
+        console.log(existingQues.has(questions[i].problem_id));
+        if (!existingQues.has(questions[i].problem_id)) {
+          questionsTobeAdded.push(questions[i]);
+        }
+      }
+    }
+    return questionsTobeAdded;
+  } catch (error) {
+    console.log(
+      "Error in actions/collection.ts >getAddtoCollectionsQuestions",
+      error
+    );
+    return { status: 500, success: false };
+  }
+};
+
+export const addQuestionstoCollection = async (
+  collection_id: string,
+  problem_ids: Array<number>
+) => {
+  try {
+    const problems = [];
+    for (let i = 0; i < problem_ids.length; i++) {
+      problems.push({
+        collection_id: collection_id,
+        problem_id: problem_ids[i],
+      });
+    }
+    await prisma.jCollectionProblem.createMany({
+      data: [...problems],
+    });
+    return { status: 200, success: true };
+  } catch (error) {
+    console.log(
+      "Error in actions/collections.ts >addQuestionstoCOllection",
+      error
+    );
+    return { status: 500, success: false };
   }
 };

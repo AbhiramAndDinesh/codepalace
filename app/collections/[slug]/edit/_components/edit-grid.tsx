@@ -4,10 +4,10 @@ import { AgGridReact } from "ag-grid-react";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import Link from "next/link";
 import { themeQuartz, iconSetQuartzBold } from "ag-grid-community";
-import { Questionsdata } from "../../problems/page";
-import { deleteProblemFromCollection } from "@/actions/collection";
-import { toast } from "sonner";
-import { BookmarkX } from "lucide-react";
+import { Questionsdata } from "@/app/problems/page";
+
+import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -15,41 +15,16 @@ interface DifficultyProps {
   value: string;
 }
 
-const deleteProblem = async (collection_id: string, problem_id: number) => {
-  try {
-    const res = await deleteProblemFromCollection(collection_id, problem_id);
-    if (!res) {
-      toast.error("Failed to remove problem from collection");
-    }
-    if (res?.status === 200) {
-      toast.success("Deleted problem from collection");
-      window.location.reload();
-    }
-  } catch (error) {
-    toast.error("Something went wrong");
-    console.log(error);
-  }
-};
-
-const DeleteProblemComponent = (props) => {
-  return (
-    <div className="h-full flex items-center">
-      <BookmarkX
-        className="hover:cursor-pointer text-gray-500 hover:text-red-500"
-        size={20}
-        onClick={() =>
-          deleteProblem(props.data.collection_id, props.data.problem_id)
-        }
-      />
-    </div>
-  );
-};
-
 const DifficultyComponent = (props: DifficultyProps) => {
   // const value = props.value;
   let background = "text-green-400/75";
   if (props.value === "Medium") background = "text-orange-400/75";
   if (props.value === "Hard") background = "text-red-500/75";
+  // return (
+  //   <div className={`${background} px-2 py-1 text-sm rounded-sm inline`}>
+  //     <p className="text-right">{value}</p>
+  //   </div>
+  // );
   return (
     <div className="">
       <p className={`font-spaceGrotesk ${background}`}>{props.value}</p>
@@ -57,7 +32,13 @@ const DifficultyComponent = (props: DifficultyProps) => {
   );
 };
 
-const GridExample = ({ data }: { data: Questionsdata[] }) => {
+const Editgrid = ({
+  data,
+  handleSelect,
+}: {
+  data: Questionsdata[];
+  handleSelect: (value: number, isChecked: boolean) => void;
+}) => {
   const myTheme = themeQuartz.withPart(iconSetQuartzBold).withParams({
     accentColor: "#EF4444",
     backgroundColor: "#1A1919",
@@ -75,17 +56,19 @@ const GridExample = ({ data }: { data: Questionsdata[] }) => {
 
   const [colDefs, setColDefs] = useState([
     {
-      field: "solved",
-      headerName: "Status",
+      field: "problem_id",
+      headerName: "Selected",
       filter: true,
       width: 120,
       cellRenderer: (props) => {
         return (
-          <input
-            type="checkbox"
-            readOnly
-            checked={props.value}
-            className="mt-2.5 w-[1rem] h-[1rem] appearance-none rounded border-[1px] border-red-500 checked:bg-red-500/75 checked:border-none relative checked:after:content-['✔'] text-background checked:after:absolute checked:after:left-[0.2rem] checked:after:top-[0.03rem] checked:after:text-xs"
+          <Checkbox
+            // className="border border-red-500 checked:bg-red-500/75 "
+            className={cn("appearance-none rounded border-red-500")}
+            value={props.value}
+            onCheckedChange={(checked) => {
+              handleSelect(props.value, checked as boolean);
+            }}
           />
         );
       },
@@ -108,11 +91,6 @@ const GridExample = ({ data }: { data: Questionsdata[] }) => {
       filter: true,
       cellRenderer: DifficultyComponent,
       width: 150,
-    },
-    {
-      headerName: "Delete",
-      cellRenderer: DeleteProblemComponent,
-      width: 100,
     },
   ]);
 
@@ -141,4 +119,4 @@ const GridExample = ({ data }: { data: Questionsdata[] }) => {
   );
 };
 
-export default GridExample;
+export default Editgrid;

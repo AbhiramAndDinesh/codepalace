@@ -35,10 +35,8 @@ export default async function Page({
     <div className="p-5 overflow-hidden">
       <Render1
         title={collectiondata.name || ""}
-        owner={owner}
         user_id={user_id}
         collection_id={collectiondata.collection_id}
-        problems={problems || []}
       />
     </div>
   );

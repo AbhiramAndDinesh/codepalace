@@ -13,19 +13,16 @@ import { toast } from "sonner";
 import { Plus } from "lucide-react";
 export default function Render1({
   title,
-  owner,
   user_id,
   collection_id,
 }: {
   title: string;
-  owner: boolean;
-  ispublic: boolean;
-  saved: boolean;
   user_id: string;
   collection_id: string;
 }) {
   const [selected, setSelected] = useState<number[]>([]);
   const [problems, setProblems] = useState<Questionsdata[]>([]);
+  const [count, setCount] = useState(0);
   const handleAdd = async () => {
     try {
       const res = await addQuestionstoCollection(collection_id, selected);
@@ -46,8 +43,10 @@ export default function Render1({
     // console.log(isChecked);
     if (isChecked) {
       setSelected((prev) => [...prev, value]);
+      setCount((prev) => prev + 1);
     } else {
       setSelected(selected.filter((item) => item !== value));
+      setCount((prev) => prev - 1);
     }
   };
   useEffect(() => {
@@ -61,6 +60,7 @@ export default function Render1({
     };
     getProblem_();
   }, []);
+
   return (
     <div className="w-full flex flex-col sm:mt-20 mt-12  gap-4">
       <div className="flex items-center justify-between gap-2">
@@ -68,19 +68,17 @@ export default function Render1({
           {title}
         </h2>
         <div className="flex items-center justify-end gap-2">
-          {owner && (
-            <Button
-              className="h-10 w-10 hover:cursor-pointer"
-              variant={"red"}
-              disabled={!(selected.length>0)}
-              onClick={() => {
-                handleAdd();
-                console.log("Adding");
-              }}
-            >
-              <Plus />
-            </Button>
-          )}
+          <Button
+            className="h-10 w-10 hover:cursor-pointer"
+            variant={"red"}
+            disabled={count == 0}
+            onClick={() => {
+              handleAdd();
+              console.log("Adding");
+            }}
+          >
+            <Plus />
+          </Button>
         </div>
       </div>
       <div className="h-[75vh]">

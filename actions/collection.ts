@@ -437,12 +437,13 @@ export const getAddtoCollectionQuestions = async (
     const questionsTobeAdded = [];
     if (questions) {
       for (let i = 0; i < questions.length; i++) {
-        console.log(existingQues.has(questions[i].problem_id));
+        // console.log(existingQues.has(questions[i].problem_id));
         if (!existingQues.has(questions[i].problem_id)) {
           questionsTobeAdded.push(questions[i]);
         }
       }
     }
+    // console.log(questionsTobeAdded)
     return questionsTobeAdded;
   } catch (error) {
     console.log(

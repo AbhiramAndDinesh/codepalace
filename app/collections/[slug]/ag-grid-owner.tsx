@@ -8,42 +8,22 @@ import { Questionsdata } from "../../problems/page";
 import { deleteProblemFromCollection } from "@/actions/collection";
 import { toast } from "sonner";
 import { BookmarkX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DialogHeader,
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogClose,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 interface DifficultyProps {
   value: string;
 }
-
-const deleteProblem = async (collection_id: string, problem_id: number) => {
-  try {
-    const res = await deleteProblemFromCollection(collection_id, problem_id);
-    if (!res) {
-      toast.error("Failed to remove problem from collection");
-    }
-    if (res?.status === 200) {
-      toast.success("Deleted problem from collection");
-      window.location.reload();
-    }
-  } catch (error) {
-    toast.error("Something went wrong");
-    console.log(error);
-  }
-};
-
-const DeleteProblemComponent = (props) => {
-  return (
-    <div className="h-full flex items-center">
-      <BookmarkX
-        className="hover:cursor-pointer text-gray-500 hover:text-red-500"
-        size={20}
-        onClick={() =>
-          deleteProblem(props.data.collection_id, props.data.problem_id)
-        }
-      />
-    </div>
-  );
-};
 
 const DifficultyComponent = (props: DifficultyProps) => {
   // const value = props.value;
@@ -58,6 +38,7 @@ const DifficultyComponent = (props: DifficultyProps) => {
 };
 
 const GridExample = ({ data }: { data: Questionsdata[] }) => {
+  const [data_, setData_] = useState<Questionsdata[]>(data);
   const myTheme = themeQuartz.withPart(iconSetQuartzBold).withParams({
     accentColor: "#EF4444",
     backgroundColor: "#1A1919",
@@ -72,11 +53,72 @@ const GridExample = ({ data }: { data: Questionsdata[] }) => {
     headerFontWeight: 600,
     spacing: 8,
   });
-
+  const deleteProblem = async (collection_id: string, problem_id: number) => {
+    try {
+      const res = await deleteProblemFromCollection(collection_id, problem_id);
+      if (!res) {
+        toast.error("Failed to remove problem from collection");
+      }
+      if (res?.status === 200) {
+        toast.success("Deleted problem from collection");
+        setData_((prev) =>
+          prev.filter((item) => item.problem_id !== problem_id)
+        );
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+      console.log(error);
+    }
+  };
+  const DeleteProblemComponent = (props) => {
+    return (
+      <div className="h-full flex items-center">
+        <Dialog>
+          <DialogTrigger asChild>
+            <BookmarkX
+              className="hover:cursor-pointer text-gray-500 hover:text-red-500"
+              size={20}
+            />
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md border-red-500">
+            <DialogHeader>
+              <DialogTitle className="font-spaceGrotesk text-gray-300">
+                Are you sure about deleting?
+              </DialogTitle>
+            </DialogHeader>
+            <DialogFooter className="sm:justify-start">
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  className="bg-red-500/20 border border-red-500/80 text-red-500 hover:bg-red-500/20"
+                  onClick={() => {
+                    deleteProblem(
+                      props.data.collection_id,
+                      props.data.problem_id
+                    );
+                  }}
+                >
+                  Yes
+                </Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  className=" border border-red-500/80 text-red-500 bg-primary"
+                >
+                  No
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  };
   const [colDefs, setColDefs] = useState([
     {
       field: "solved",
-      headerName: "Status",
+      headerName: "Solved",
       filter: true,
       width: 120,
       cellRenderer: (props) => {
@@ -120,7 +162,7 @@ const GridExample = ({ data }: { data: Questionsdata[] }) => {
     <div className="h-full">
       <div className="h-full max-md:hidden">
         <AgGridReact<Questionsdata>
-          rowData={data}
+          rowData={data_}
           // @ts-expect-error - I don't know why this ts error is occuring
           columnDefs={colDefs}
           theme={myTheme}
@@ -130,7 +172,7 @@ const GridExample = ({ data }: { data: Questionsdata[] }) => {
       </div>
       <div className="h-full md:hidden">
         <AgGridReact<Questionsdata>
-          rowData={data}
+          rowData={data_}
           // @ts-expect-error - I don't know why this ts error is occuring
           columnDefs={colDefs}
           theme={myTheme}
